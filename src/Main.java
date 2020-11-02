@@ -12,17 +12,17 @@ public class Main {
             System.out.println("Driver ok.");
 
             //Pour Windows :
-            /*
+
             String url = "jdbc:mysql://localhost:3306/projet_edt";
             String user = "root";
             String password = "";
-            */
-            //Pour Mac :
 
+            //Pour Mac :
+/*
             String url = "jdbc:mysql://localhost:8889/projet_edt";
             String user = "root";
             String password = "root";
-
+*/
 
             Connection cnx = DriverManager.getConnection(url, user, password);
 
