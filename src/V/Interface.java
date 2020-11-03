@@ -1,18 +1,20 @@
 package V;
-
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Interface extends JFrame{
+public class Interface extends JFrame {
+    //private CardLayout cardLayout;
+    //private JPanel panelGlobal;
 
     String[] niveauxStrings = {"1 er année", "2 ème année", "3 ème année", "4 ème année", "5 ème année"};//different groupe que l'on auar avec groupe.nom
     String[] HorraireDebut = {"8H00", "9H30", "11H00", "12H30", "14H00","15H30","17H00","18H30"};
     String[] HorraireFin = { "9H30", "11H00", "12H30", "14H00","15H30","17H00","18H30","20H00"};
     String[] matieres = {"Maths", "Physique", "Physique Appliquée", "Informatique"};
     String[] Jours = {"Lundi", "Mardi", "Mercredi","Jeudi","Vendredi","Samedi"};
+    //String[] Date = {"1", "2", "3", "Informatique"};
 
     /* Construction de l'interface graphique */
     public Interface() {
@@ -154,30 +156,24 @@ public class Interface extends JFrame{
         JMenu mnuEdit = new JMenu( "Add" );
 
         JMenuItem mnuAddTeacher = new JMenuItem( "Teacher" );
-        mnuAddTeacher.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                create_frameAddTeacher();
-            }
-        });
+        mnuAddTeacher.addActionListener(this::ListnerAddTeacher);
         mnuEdit.add(mnuAddTeacher);
 
         JMenuItem mnuAddStudent = new JMenuItem( "Student" );
-        mnuAddStudent.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                create_frameAddStudent();
-            }
-        });
+        mnuAddStudent.addActionListener(this::ListnerAddStudent);
         mnuEdit.add(mnuAddStudent);
 
         mnuEdit.addSeparator();
 
-        JMenuItem mnuAddClasses = new JMenuItem( "Classes" );
-        mnuAddClasses.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                create_frameAddCours();
-            }
-        });
-        mnuEdit.add(mnuAddClasses);
+        JMenuItem mnuAddCours = new JMenuItem( "Cours" );
+        mnuAddCours.addActionListener(this::ListnerAddCours);
+        mnuEdit.add(mnuAddCours);
+
+        mnuEdit.addSeparator();
+
+        JMenuItem mnuAddMatiere = new JMenuItem( "Matiere" );
+        //mnuAddMatiere.addActionListener(this::ListnerAddCours);
+        mnuEdit.add(mnuAddMatiere);
 
         menuBar.add(mnuEdit);
 
@@ -186,6 +182,7 @@ public class Interface extends JFrame{
 
         JMenuItem mnuDeleteTeacher = new JMenuItem( "Teacher" );
         mnuDelete.add(mnuDeleteTeacher);
+
 
         JMenuItem mnuDeleteStudent = new JMenuItem( "Student" );
         mnuDelete.add(mnuDeleteStudent);
@@ -200,21 +197,49 @@ public class Interface extends JFrame{
         return menuBar;
     }
 
+    public void ListnerAddTeacher(ActionEvent event) {
+        create_frameAddTeacher();
+    }
+    public void ListnerAddCours(ActionEvent event) {
+        create_frameAddCours();
+    }
+    public void ListnerAddStudent(ActionEvent event) {
+        create_frameAddStudent();
+    }
+
     /* JPanel 'Ajout d'un cours' */
     public JFrame create_frameAddCours() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridLayout(6, 2));
+
         JLabel jlabelNomClasse = new JLabel("Nom :");
         JTextField jtfNomClasse = new JTextField(10);
+
         JLabel jlabelGroupeClasse = new JLabel("Groupe :");
         JComboBox jcmbGroupeClasse = new JComboBox<String>(niveauxStrings);//different groupe que l'on auar avec groupe.nom
+
         JLabel jlabelMatiere = new JLabel("matiere:");
         JComboBox jcmbMatiereCours = new JComboBox<String>(matieres);
+
         JLabel jlabelHeureDebut = new JLabel("Heure de debut :");
         JComboBox jcmHeureDebut = new JComboBox<String>(HorraireDebut);
+
         JLabel jlabelHeureFin = new JLabel("Heure de Fin :");//a modifier pour ajouter une horloge
         JComboBox jcmHeureFin = new JComboBox<String>(HorraireFin);
+
         JButton jButonEnregistre = new JButton("registrer");
+        jButonEnregistre.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+
+                System.out.print(jtfNomClasse.getText());
+                System.out.print(jcmbGroupeClasse.getSelectedItem());
+                System.out.print(jcmbMatiereCours.getSelectedItem());
+                System.out.print(jcmHeureDebut.getSelectedItem());
+                System.out.print(jcmHeureFin.getSelectedItem());
+
+            }
+        });
 
         jPanel.add(jlabelNomClasse);
         jPanel.add(jtfNomClasse);
@@ -246,16 +271,32 @@ public class Interface extends JFrame{
     public JFrame create_frameAddTeacher() {
         JPanel jpanelAddTeacher = new JPanel();
         jpanelAddTeacher.setLayout(new GridLayout(5,2));
+
         JLabel jlabelNomProfesseur = new JLabel("Last Name :");
         JTextField jtfNomProfesseur = new JTextField(10);
+
         JLabel jlabelPrenomProfesseur = new JLabel("First name :");
         JTextField jtfPrenomProfesseur = new JTextField(10);
+
         JLabel jlabelMatiereProfesseur = new JLabel("Classes :");
         String[] matieres = {"Maths", "Physique", "Physique Appliquée", "Informatique"};
         JComboBox jcmbMatiereProfesseur = new JComboBox<String>(matieres);
+
         JLabel jlabelNombreHeureProfesseur = new JLabel("Numbers of hours :");
         JTextField jtfNombreHeureProfesseur = new JTextField(10);
+
         JButton jButtonAddProf = new JButton("registre");
+        jButtonAddProf.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+
+                System.out.print(jtfNomProfesseur.getText());
+                System.out.print(jtfNomProfesseur.getText());
+                System.out.print(jcmbMatiereProfesseur.getSelectedItem());
+                System.out.print(jtfNombreHeureProfesseur.getText());
+
+            }
+        });
 
         jpanelAddTeacher.add(jlabelNomProfesseur);
         jpanelAddTeacher.add(jtfNomProfesseur);
@@ -284,15 +325,31 @@ public class Interface extends JFrame{
     public JFrame create_frameAddStudent() {
         JPanel jpanelAddEleve = new JPanel();
         jpanelAddEleve.setLayout(new GridLayout(5,2));
+
         JLabel jlabelEleveName = new JLabel("Name :");
         JTextField jtfEleveName = new JTextField(10);
+
         JLabel jlabelEleveFirstName = new JLabel("First name :");
         JTextField jtfEleveFirstName = new JTextField(10);
+
         JLabel jlabelEleveClasse = new JLabel("Classe :");
         JComboBox jcmbEleveClasse = new JComboBox<String>();//recuperer les groupes sur mysql
+
         JLabel jlabelEleveGrp = new JLabel("Promo :");
         JComboBox jcmbEleveGrp = new JComboBox<String>(niveauxStrings);//recuperer les differentes promos
+
         JButton jButtonAddEleve = new JButton("registre");
+        jButtonAddEleve.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+
+                System.out.print(jtfEleveName.getText());
+                System.out.print(jtfEleveFirstName.getText());
+                System.out.print(jcmbEleveClasse.getSelectedItem());
+                System.out.print(jcmbEleveGrp.getSelectedItem());
+
+            }
+        });
 
         jpanelAddEleve.add(jlabelEleveName);
         jpanelAddEleve.add(jtfEleveName);
@@ -316,10 +373,6 @@ public class Interface extends JFrame{
 
         return jframeAddEleve;
     }
-
-
-
-
 
 
     public static void main(String[] args) throws Exception {
