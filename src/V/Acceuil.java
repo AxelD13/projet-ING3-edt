@@ -1,12 +1,16 @@
 package V;
+import Control.Database;
+
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class Acceuil extends JFrame {
 
-    public Acceuil() {
+    public Acceuil(Database db, Connection cnx) {
 
         this.setTitle("Menu");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -16,40 +20,42 @@ public class Acceuil extends JFrame {
         JPanel contentpane = (JPanel) this.getContentPane();
         contentpane.setLayout(new FlowLayout());
 
-        JLabel jlabelId = new JLabel("ID");
+        JLabel jlabelId = new JLabel("Email");
         contentpane.add(jlabelId);
         JTextField jtextId = new JTextField(6);
         contentpane.add(jtextId);
 
         this.setVisible(true);
+
         JLabel jlabelMp = new JLabel("Password");
         contentpane.add(jlabelMp);
         JPasswordField jtextMp = new JPasswordField(6);
         contentpane.add(jtextMp);
 
-        contentpane.add(boutonValide(jtextId,jtextMp),BorderLayout.CENTER);
-    }
-
-    private JPanel boutonValide(JTextField jtextId,JTextField jtextMp) {
-        JPanel jPanel = new JPanel();
         JButton jButtonValider = new JButton("Ok");
-        jPanel.add(jButtonValider);
+        contentpane.add(jButtonValider, BorderLayout.CENTER);
 
         jButtonValider.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                String id = jtextId.getText();
-                String mp = jtextMp.getText();
-                System.out.println(id);
-                System.out.println(mp);
+                String email = jtextId.getText();
+                String pw = String.valueOf(jtextMp.getPassword());
+                String status = db.identification(cnx, email, pw);
+
+                if (!status.equals("OK")) {  //affiche un message en cas d'email ou mdp incorrect
+                    JOptionPane.showMessageDialog(contentpane, status," Erreur", JOptionPane.WARNING_MESSAGE);
+                } else {  //si email et mdp sont ok, affiche l'interface
+                    try {
+                        UIManager.setLookAndFeel(new NimbusLookAndFeel());
+                    } catch (UnsupportedLookAndFeelException e) {
+                        e.printStackTrace();
+                    }
+                    Interface frame = new Interface();
+                    frame.setVisible(true);
+                }
             }
         });
-
-        return jPanel;
     }
 
-    public static void main(String[] args) {
-        Acceuil n = new Acceuil();
-    }
-
+    public static void main(String[] args) {}
 
 }
