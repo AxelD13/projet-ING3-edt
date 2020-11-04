@@ -23,7 +23,8 @@ public class Session {
         this.id_Type = new Type_Course(idType, nameType);
     }
 
-    public enum State{VALIDEE, ANNULE}
+    public Session(){}
+    public enum State{EN_COURS, VALIDEE, ANNULE}
 
     public int getId() {
         return id;

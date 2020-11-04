@@ -9,7 +9,7 @@ public class Student extends User{
         this.number = number;
         this.id_Group_Promotion = group_promotion;
     }
-
+public Student(){}
     public int getNumber() {
         return number;
     }

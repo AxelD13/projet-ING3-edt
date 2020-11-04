@@ -1,18 +1,21 @@
 package M;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
     private int id;
     private String name;
     private int capacity;
     private Site id_site;
 
-    public Room(int id, String name, int capacity, int idSite, String nameSite) {
+    public Room(int id, String name, int capacity, int idSite, List<String> nameSite) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
         this.id_site = new Site(idSite, nameSite);
     }
-
+public Room(){}
     public int getId() {
         return id;
     }

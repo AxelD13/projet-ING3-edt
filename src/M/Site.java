@@ -1,13 +1,17 @@
 package M;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Site {
     private int id;
-    private String name;
+    private List<String> name;
 
-    public Site(int id, String name) {
+    public Site(int id, List<String> name) {
         this.id = id;
-        this.name = name;
+        this.name = new ArrayList<>();
     }
+public Site(){}
 
     public int getId() {
         return id;
@@ -17,11 +21,11 @@ public class Site {
         this.id = id;
     }
 
-    public String getName() {
+    public List<String> getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(List<String> name) {
         this.name = name;
     }
 }

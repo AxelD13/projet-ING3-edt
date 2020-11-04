@@ -18,7 +18,11 @@ public class User {
         this.firstName = firstName;
         this.permission = permission;
     }
+
+    public User(){}
+
 public enum Permission {ONE, TWO, THREE, FOUR}
+
     public int getId() {
         return id;
     }

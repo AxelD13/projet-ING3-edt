@@ -9,6 +9,7 @@ public class Type_Course {
         this.name = name;
     }
 
+    public Type_Course(){}
     public enum Name{LESSON, TD, TP, PROJECT, SUPPORT}
 
     public int getId() {

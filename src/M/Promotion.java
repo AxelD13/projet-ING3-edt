@@ -9,6 +9,7 @@ public class Promotion {
         this.name = name;
     }
 
+    public Promotion(){}
     public int getId() {
         return id;
     }

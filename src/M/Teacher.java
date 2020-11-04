@@ -1,19 +1,33 @@
 package M;
 
-public class Teacher extends User {
-private Course id_course;
+import java.util.HashSet;
+import java.util.Set;
 
-    public Teacher(int id, String email, String password, String lastName, String firstName, Permission permission, Course id_course) {
+public class Teacher extends User {
+    private Set<Course> id_course = new HashSet<Course>();
+
+
+    public Teacher(int id, String email, String password, String lastName, String firstName, Permission permission) {
         super(id, email, password, lastName, firstName, permission);
-        this.id_course = id_course;
 
     }
 
-    public Course getId_course() {
+    public Teacher() {
+    }
+
+    public Set<Course> getId_course() {
         return id_course;
     }
 
-    public void setId_course(Course id_course) {
+    public void setId_course(Set<Course> id_course) {
         this.id_course = id_course;
+    }
+
+    void addCourse(Course course){
+        this.id_course.add(course);
+    }
+
+    void removeCourse(Course course){
+        this.id_course.remove(course);
     }
 }

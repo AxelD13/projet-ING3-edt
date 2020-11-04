@@ -9,6 +9,8 @@ public class Group_Promotion {
         this.id_promotion = id_promotion;
     }
 
+    public Group_Promotion(){}
+
     public Promotion getPromotion() {
         return promotion;
     }
