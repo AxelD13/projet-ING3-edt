@@ -19,7 +19,7 @@ public class Interface extends JFrame {
     /* Construction de l'interface graphique */
     public Interface() {
         super( "Mon emploi du temps" );
-        this.setSize(1200,800);//Largeur; Hauter
+        this.setSize(1400,800);//Largeur; Hauter
         this.setLocationRelativeTo( null );
         this.setDefaultCloseOperation( DISPOSE_ON_CLOSE );
 
@@ -30,37 +30,40 @@ public class Interface extends JFrame {
 
         JScrollPane jScrollPaneS = new JScrollPane(panSemaine());
         jScrollPaneS.setPreferredSize(new Dimension(0,70));
-        contentpane.add(jScrollPaneS,BorderLayout.NORTH);
-
-        //contentpane.add(panJours(),new FlowLayout());
+        contentpane.add(jScrollPaneS,BorderLayout.PAGE_END);
 
         JScrollPane jScrollPaneH = new JScrollPane(panHeure());
-        jScrollPaneH.setPreferredSize(new Dimension(130,0));
+        jScrollPaneH.setPreferredSize(new Dimension(200,80));
         contentpane.add(jScrollPaneH,BorderLayout.WEST);
 
+        JScrollPane jScrollPaneJ = new JScrollPane(panJours());
+        jScrollPaneJ.setPreferredSize(new Dimension(200,80));
+        contentpane.add(jScrollPaneJ,BorderLayout.PAGE_START);
 
-
+        JScrollPane jScrollPaneQ = new JScrollPane(panQuadrillage());
+        jScrollPaneQ.setPreferredSize(new Dimension(200,80));
+        contentpane.add(jScrollPaneQ,BorderLayout.CENTER);
     }
 
     /* Methode de construction des heures */
     private  JPanel panHeure(){
         JPanel jPanel = new JPanel(new GridLayout(8,1));
         jPanel.setBackground(new Color(80,80,200));
-        JLabel jlabel_7H_9H30= new JLabel("7h - 9H30");
+        JLabel jlabel_7H_9H30= new JLabel("8h - 9H30", SwingConstants.CENTER);
         jPanel.add(jlabel_7H_9H30);
-        JLabel jlabel_9H30_11H= new JLabel("9H30 - 11H");
+        JLabel jlabel_9H30_11H= new JLabel("9H30 - 11H", SwingConstants.CENTER);
         jPanel.add(jlabel_9H30_11H);
-        JLabel jlabel_11H_12H30= new JLabel("11H - 12H30");
+        JLabel jlabel_11H_12H30= new JLabel("11H - 12H30", SwingConstants.CENTER);
         jPanel.add(jlabel_11H_12H30);
-        JLabel jlabel_12H30_14H= new JLabel("12H30 - 14H");
+        JLabel jlabel_12H30_14H= new JLabel("12H30 - 14H", SwingConstants.CENTER);
         jPanel.add(jlabel_12H30_14H);
-        JLabel jlabel_14H_15H30= new JLabel("14H - 15H30");
+        JLabel jlabel_14H_15H30= new JLabel("14H - 15H30", SwingConstants.CENTER);
         jPanel.add(jlabel_14H_15H30);
-        JLabel jlabel_15H30_17H= new JLabel("15H30 - 17H");
+        JLabel jlabel_15H30_17H= new JLabel("15H30 - 17H", SwingConstants.CENTER);
         jPanel.add(jlabel_15H30_17H);
-        JLabel jlabel_17H_18H30= new JLabel("17H - 18H30");
+        JLabel jlabel_17H_18H30= new JLabel("17H - 18H30", SwingConstants.CENTER);
         jPanel.add(jlabel_17H_18H30);
-        JLabel jlabel_18H30_20H= new JLabel("18H30 - 20H");
+        JLabel jlabel_18H30_20H= new JLabel("18H30 - 20H", SwingConstants.CENTER);
         jPanel.add(jlabel_18H30_20H);
 
         return jPanel;
@@ -69,48 +72,45 @@ public class Interface extends JFrame {
     /* Methode de construction des jours de la semaines*/
     private  JPanel panJours(){
 
-        JPanel jPanel1 = new JPanel( new GridLayout(1,6));
-        JLabel jLabel_Lundi= new JLabel("Lundi");
+        JPanel jPanel1 = new JPanel( new GridLayout(1,7));
+        jPanel1.setBackground(new Color(80,80,200));
+        JLabel jLabel_espace= new JLabel("Horaires / Jours", SwingConstants.CENTER);
+        jPanel1.add(jLabel_espace);
+        JLabel jLabel_Lundi= new JLabel("Lundi", SwingConstants.CENTER);
         jPanel1.add(jLabel_Lundi);
-        JLabel jLabel_Mardi= new JLabel("Mardi");
+        JLabel jLabel_Mardi= new JLabel("Mardi", SwingConstants.CENTER);
         jPanel1.add(jLabel_Mardi);
-        JLabel jLabel_Mercredi= new JLabel("Mercredi");
+        JLabel jLabel_Mercredi= new JLabel("Mercredi", SwingConstants.CENTER);
         jPanel1.add(jLabel_Mercredi);
-        JLabel jLabel_Jeudi= new JLabel("Jeudi");
+        JLabel jLabel_Jeudi= new JLabel("Jeudi", SwingConstants.CENTER);
         jPanel1.add(jLabel_Jeudi);
-        JLabel jLabel_Vendredi= new JLabel("Vendredi");
+        JLabel jLabel_Vendredi= new JLabel("Vendredi", SwingConstants.CENTER);
         jPanel1.add(jLabel_Vendredi);
-        JLabel jLabel_Samedi= new JLabel("Samedi");
+        JLabel jLabel_Samedi= new JLabel("Samedi", SwingConstants.CENTER);
         jPanel1.add(jLabel_Samedi);
 
         return jPanel1;
     }
 
     /* Methode de construction des boutons semaines*/
-    private JPanel panSemaine(){
-        JPanel jPanel = new JPanel(new GridLayout(1,30));
-        jPanel.setBackground(new Color(80,80,200));
-        for(int i = 1; i<30;i++ ){
-            jPanel.add( new JButton(String.valueOf(i)));
+    private JPanel panQuadrillage() {
+        JPanel jPanel = new JPanel(new GridLayout(8, 6));
+        jPanel.setBackground(new Color(37, 253, 233));
+        for (int i = 1; i < 49; i++) {
+
+            jPanel.add(new JButton(""));
         }
+        return jPanel;
+    }
 
-/*
-        JPanel jPanel1 = new JPanel( new GridLayout(1,6));
-        JLabel jLabel_Lundi= new JLabel("Lundi");
-        jPanel1.add(jLabel_Lundi);
-        JLabel jLabel_Mardi= new JLabel("Mardi");
-        jPanel1.add(jLabel_Mardi);
-        JLabel jLabel_Mercredi= new JLabel("Mercredi");
-        jPanel1.add(jLabel_Mercredi);
-        JLabel jLabel_Jeudi= new JLabel("Jeudi");
-        jPanel1.add(jLabel_Jeudi);
-        JLabel jLabel_Vendredi= new JLabel("Vendredi");
-        jPanel1.add(jLabel_Vendredi);
-        JLabel jLabel_Samedi= new JLabel("Samedi");
-        jPanel1.add(jLabel_Samedi);
 
-        jPanel.add(jPanel1,BorderLayout.NORTH);
-*/
+        /* Methode de construction des boutons semaines*/
+    private JPanel panSemaine() {
+        JPanel jPanel = new JPanel(new GridLayout(1, 30));
+        jPanel.setBackground(new Color(80, 80, 200));
+        for (int i = 1; i < 30; i++) {
+            jPanel.add(new JButton(String.valueOf(i)));
+        }
         return jPanel;
     }
 
