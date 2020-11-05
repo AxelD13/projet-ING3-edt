@@ -92,7 +92,7 @@ public class Interface extends JFrame {
         return jPanel1;
     }
 
-    /* Methode de construction des boutons semaines*/
+    /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
         jPanel.setBackground(new Color(37, 253, 233));
