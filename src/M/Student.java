@@ -1,11 +1,13 @@
 package M;
 
-public class Student extends User{
+import M.User.*;
+
+public class Student extends User {
     private int number;
     private Group_Promotion id_Group_Promotion;
 
-    public Student(int id, String email, String password, String lastName, String firstName, Permission permission, int number, Group_Promotion group_promotion) {
-        super(id, email, password, lastName, firstName, permission);
+    public Student(int id, String email, String password, String lastName, String firstName, int number, Group_Promotion group_promotion) {
+        super(id, email, password, lastName, firstName, EnumPermission.STUDENT);
         this.number = number;
         this.id_Group_Promotion = group_promotion;
     }

@@ -1,4 +1,4 @@
-package M;
+package M.User;
 
 import java.security.Permission;
 
@@ -8,9 +8,12 @@ public class User {
     private String password;
     private String lastName;
     private String firstName;
-    private Permission permission;
 
-    public User(int id, String email, String password, String lastName, String firstName, Permission permission){
+    private EnumPermission permission;
+
+    public User() {}
+
+    public User(int id, String email, String password, String lastName, String firstName, EnumPermission permission){
         this.id = id;
         this.email = email;
         this.password = password;
@@ -18,10 +21,6 @@ public class User {
         this.firstName = firstName;
         this.permission = permission;
     }
-
-    public User(){}
-
-public enum Permission {ONE, TWO, THREE, FOUR}
 
     public int getId() {
         return id;
@@ -63,11 +62,12 @@ public enum Permission {ONE, TWO, THREE, FOUR}
         this.firstName = firstName;
     }
 
-    public Permission getPermission() {
+    public EnumPermission getPermission() {
         return permission;
     }
 
-    public void setPermission(Permission permission) {
+    public void setPermission(EnumPermission permission) {
         this.permission = permission;
     }
 }
+
