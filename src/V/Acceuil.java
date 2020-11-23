@@ -49,8 +49,7 @@ public class Acceuil extends JFrame {
                     } catch (UnsupportedLookAndFeelException e) {
                         e.printStackTrace();
                     }
-
-                    Interface frame = new Interface(db, cnx);
+                    ViewDirector frame = new ViewDirector();
                     frame.setVisible(true);
                 }
             }
