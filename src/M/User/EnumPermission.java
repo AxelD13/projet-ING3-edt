@@ -9,7 +9,7 @@ public enum EnumPermission {
     TEACHER(3),
     STUDENT(4);
 
-    private int value;
+    private final int value;
     private static Map map = new HashMap<>();
 
     EnumPermission(int value) {

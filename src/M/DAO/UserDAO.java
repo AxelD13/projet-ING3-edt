@@ -14,11 +14,24 @@ public class UserDAO extends DAO<User> {
     }
 
     public boolean create(User obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO user(EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, PERMISSION)" +
+                    "values('" + obj.getEmail() + "', '" + obj.getPassword() + "', '" + obj.getLastName() + "', '"
+                    + obj.getFirstName() + "', '" + obj.getPermission().getValue()
+                    + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(User obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM user WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(User obj) {

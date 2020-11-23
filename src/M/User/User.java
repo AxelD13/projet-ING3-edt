@@ -13,7 +13,15 @@ public class User {
 
     public User() {}
 
-    public User(int id, String email, String password, String lastName, String firstName, EnumPermission permission){
+    public User(String email, String password, String lastName, String firstName, EnumPermission permission) {
+        this.email = email;
+        this.password = password;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.permission = permission;
+    }
+
+    public User(int id, String email, String password, String lastName, String firstName, EnumPermission permission) {
         this.id = id;
         this.email = email;
         this.password = password;

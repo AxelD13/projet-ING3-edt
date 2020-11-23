@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PromotionDOA extends DAO<Promotion>{
+public class PromotionDAO extends DAO<Promotion>{
 
-    public PromotionDOA(Connection conn) {
+    public PromotionDAO(Connection conn) {
         super(conn);
     }
 

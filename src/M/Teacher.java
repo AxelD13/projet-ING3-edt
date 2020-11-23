@@ -6,14 +6,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Teacher extends User {
+
     private Set<Course> id_course = new HashSet<Course>();
 
+    public Teacher() {}
+
+    public Teacher(String email, String password, String lastName, String firstName) {
+        super(email, password, lastName, firstName, EnumPermission.TEACHER);
+    }
 
     public Teacher(int id, String email, String password, String lastName, String firstName) {
         super(id, email, password, lastName, firstName, EnumPermission.TEACHER);
-    }
-
-    public Teacher() {
     }
 
     public Set<Course> getId_course() {

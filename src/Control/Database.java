@@ -30,11 +30,11 @@ public class Database {
 
     public void queryDB(Connection cnx) { //permet de récuperer des données dans la bdd
         ResultSet results = null;
-        String requete = "SELECT * FROM user";
+        String query = "SELECT * FROM user"; //modifier la requête en fonction des besoins
 
         try {
             Statement stmt = cnx.createStatement();
-            results = stmt.executeQuery(requete); //utiliser .executeUpdate() pour une maj de la bdd
+            results = stmt.executeQuery(query); //utiliser .executeUpdate() pour une maj de la bdd
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,14 +63,14 @@ public class Database {
         boolean emailOK = false;
 
         ResultSet results = null;
-        String requete = null;
+        String query = null;
         Scanner sc = new Scanner(System.in);
 
         //VERIFICATION EMAIL//
         try {
-            requete = "SELECT * FROM user";
+            query = "SELECT * FROM user";
             Statement stmt = cnx.createStatement();
-            results = stmt.executeQuery(requete);
+            results = stmt.executeQuery(query);
 
             ResultSetMetaData resultsMD = results.getMetaData();
             boolean next = results.next();
@@ -93,9 +93,9 @@ public class Database {
 
         //VERIFICATION PASSWORD//
         try {
-            requete = "SELECT PASSWORD FROM user WHERE ID = " + id;
+            query = "SELECT PASSWORD FROM user WHERE ID = " + id;
             Statement stmt = cnx.createStatement();
-            results = stmt.executeQuery(requete);
+            results = stmt.executeQuery(query);
 
             if(results.next()) {
                 if (!passwordIn.equals(results.getString("PASSWORD"))) {
@@ -106,6 +106,6 @@ public class Database {
             e.printStackTrace();
         }
 
-        return "OK";
+        return "OK"; //si email + mdp valides, on retourne OK
     }
 }
