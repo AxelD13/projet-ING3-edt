@@ -1,11 +1,12 @@
 package V;
-import javax.swing.*;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Interface extends JFrame {
+import javax.swing.*;
+        import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+        import java.awt.*;
+        import java.awt.event.ActionEvent;
+        import java.awt.event.ActionListener;
+
+public class ViewRespSco extends JFrame {
 
     String[] niveauxStrings = {"1 er année", "2 ème année", "3 ème année", "4 ème année", "5 ème année"};//different groupe que l'on auar avec groupe.nom
     String[] HorraireDebut = {"8H00", "9H30", "11H00", "12H30", "14H00","15H30","17H00","18H30"};
@@ -15,11 +16,12 @@ public class Interface extends JFrame {
     private String[] listContent = {"EDT", "AfficherE","AfficherT","AfficherR","AfficherP"};
     private CardLayout cardLayout;
     private JPanel panelmenu,panelprincipal,panelJours,panelsemaine,panelhoraire,panelJoursSemaine,panelEdt, panelAfficherStudent,panelInfoStudent,panelInfoS,panelinfoSrecherche, panelListeStudent,
-            panelAfficherTeacher, panelinfoTeacher,panelListeTeacher, panelAfficherRoom, panelinfoRoom,panelListeRoom,  panelAfficherPromo, panelinfoPromo,panelListePromo;
+            panelAfficherTeacher, panelinfoTeacher,panelListeTeacher, panelAfficherRoom, panelinfoRoom,panelListeRoom,  panelAfficherPromo, panelinfoPromo,panelListePromo, panelinfoTrecherche,panelinfoT,panelinfoRrecherche,
+            panelinfoR;
 
 
     /* Construction de l'interface graphique */
-    public Interface() {
+    public ViewRespSco() {
         super( "Mon emploi du temps" );
         this.setSize(1200,800);//Largeur; Hauter
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,16 +118,6 @@ public class Interface extends JFrame {
         // Définition du menu déroulant "Ajouter" et de son contenu
         JMenu mnuEdit = new JMenu( "Add" );
 
-        JMenuItem mnuAddTeacher = new JMenuItem( "Teacher" );
-        mnuAddTeacher.addActionListener(this::ListnerAddTeacher);
-        mnuEdit.add(mnuAddTeacher);
-
-        JMenuItem mnuAddStudent = new JMenuItem( "Student" );
-        mnuAddStudent.addActionListener(this::ListnerAddStudent);
-        mnuEdit.add(mnuAddStudent);
-
-        mnuEdit.addSeparator();
-
         JMenuItem mnuAddCours = new JMenuItem( "Cours" );
         mnuAddCours.addActionListener(this::ListnerAddCours);
         mnuEdit.add(mnuAddCours);
@@ -140,15 +132,6 @@ public class Interface extends JFrame {
 
         // Définition du menu déroulant "Delete" et de son contenu
         JMenu mnuDelete = new JMenu( "Delete" );
-
-        JMenuItem mnuDeleteTeacher = new JMenuItem( "Teacher" );
-        mnuDelete.add(mnuDeleteTeacher);
-
-
-        JMenuItem mnuDeleteStudent = new JMenuItem( "Student" );
-        mnuDelete.add(mnuDeleteStudent);
-
-        mnuDelete.addSeparator();
 
         JMenuItem mnuDeleteClasses = new JMenuItem( "Classes" );
         mnuDelete.add(mnuDeleteClasses);
@@ -273,7 +256,7 @@ public class Interface extends JFrame {
     private JPanel panelInfoStudent(){
 
         panelInfoStudent = new JPanel();
-        panelInfoStudent.setLayout(new BorderLayout());//////Probleme ici
+        panelInfoStudent.setLayout(new BorderLayout());
         panelInfoStudent.add(panelinfoSrecherche(),BorderLayout.NORTH);
         panelInfoStudent.add(panelinfoS(),BorderLayout.CENTER);
 
@@ -281,15 +264,23 @@ public class Interface extends JFrame {
     }
     private JPanel panelinfoSrecherche(){
         panelinfoSrecherche = new JPanel();
-        JTextField jtextRechNom = new JTextField("Nom" );
-        panelinfoSrecherche.add(jtextRechNom);//---------------------Ajouter listner
+        JTextField jtextRechSNom = new JTextField("Nom" );
+        jtextRechSNom.setPreferredSize(new Dimension(120,30));
+        JTextField jtextRechPrenom = new JTextField("Prenom" );
+        jtextRechPrenom.setPreferredSize(new Dimension(120,30));
+        JButton jButtonRecherche = new JButton("Search");
+
+        panelinfoSrecherche.add(jtextRechSNom);//---------------------Ajouter listner
+        panelinfoSrecherche.add(jtextRechPrenom);//---------------------Ajouter listner
+        panelinfoSrecherche.add(jButtonRecherche);//---------------------Ajouter listner
 
         return panelinfoSrecherche;
     }
     private JPanel panelinfoS(){
 
         panelInfoS= new JPanel( new GridLayout(1,6));
-        //panelInfoStudent.setPreferredSize(new Dimension(0,40));
+        panelInfoS.setPreferredSize(new Dimension(0,50));
+
         JLabel jLabel_Lundi= new JLabel("Nom", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Lundi);
         JLabel jLabel_Mardi= new JLabel("Prenom", SwingConstants.CENTER);
@@ -337,27 +328,43 @@ public class Interface extends JFrame {
 
         return panelAfficherTeacher;
     }
+
     private JPanel panelinfoTeacher(){
 
-        panelinfoTeacher = new JPanel( new GridLayout(1,6));
-        panelinfoTeacher.setPreferredSize(new Dimension(0,70));
-        JLabel jLabelTfirstName= new JLabel("Nom", SwingConstants.CENTER);
-        panelinfoTeacher.add(jLabelTfirstName);
-        JLabel jLabelTname= new JLabel("Prenom", SwingConstants.CENTER);
-        panelinfoTeacher.add(jLabelTname);
-        JLabel jLabelTmatiere= new JLabel("Matiere", SwingConstants.CENTER);
-        panelinfoTeacher.add(jLabelTmatiere);
-        JLabel jLabelTclasse= new JLabel("Classe", SwingConstants.CENTER);
-        panelinfoTeacher.add(jLabelTclasse);
-        JLabel jLabelTcours= new JLabel("Cours", SwingConstants.CENTER);
-        panelinfoTeacher.add(jLabelTcours);
-        JLabel jLabelTnbHours= new JLabel("Nombre Heure de cours", SwingConstants.CENTER);
-        panelinfoTeacher.add(jLabelTnbHours);
-        JTextField jTextNomP = new JTextField("Nom", SwingConstants.CENTER);
-        panelinfoTeacher.add(jTextNomP);
-        JTextField jTextMatierP = new JTextField("Matiere", SwingConstants.CENTER);
-        panelinfoTeacher.add(jTextMatierP);//_________________________Ajouter listner
+        panelinfoTeacher = new JPanel();
+        panelinfoTeacher.setLayout(new BorderLayout());
+        panelinfoTeacher.add(panelinfoTrecherche(),BorderLayout.NORTH);
+        panelinfoTeacher.add(panelinfoT(),BorderLayout.CENTER);
+
         return panelinfoTeacher;
+    }
+    private JPanel panelinfoTrecherche(){
+        panelinfoTrecherche = new JPanel();
+        JTextField jtextRechNom = new JTextField("Nom" );
+        jtextRechNom.setPreferredSize(new Dimension(120,30));
+        JTextField jtextRechMat = new JTextField("Matiere" );
+        jtextRechMat.setPreferredSize(new Dimension(120,30));
+        JButton jButtonRecherche = new JButton("Search");
+
+        panelinfoTrecherche.add(jtextRechNom);//---------------------Ajouter listner
+        panelinfoTrecherche.add(jtextRechMat);//---------------------Ajouter listner
+        panelinfoTrecherche.add(jButtonRecherche);//---------------------Ajouter listner
+
+        return panelinfoTrecherche;
+    }
+    private JPanel panelinfoT(){
+
+        panelinfoT = new JPanel( new GridLayout(1,6));
+        panelinfoT.setPreferredSize(new Dimension(0,50));
+        JLabel jLabelTfirstName= new JLabel("Nom", SwingConstants.CENTER);
+        panelinfoT.add(jLabelTfirstName);
+        JLabel jLabelTname= new JLabel("Prenom", SwingConstants.CENTER);
+        panelinfoT.add(jLabelTname);
+        JLabel jLabelTmatiere= new JLabel("Matiere", SwingConstants.CENTER);
+        panelinfoT.add(jLabelTmatiere);
+        JLabel jLabelTnbHours= new JLabel("Nombre Heure de cours", SwingConstants.CENTER);
+        panelinfoT.add(jLabelTnbHours);
+        return panelinfoT;
 
     }
     private JPanel panelListeT(){
@@ -365,7 +372,10 @@ public class Interface extends JFrame {
         panelListeTeacher = new JPanel(new GridLayout(25,1));//remplacer 15 par n prof
         //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
         for (int i = 1; i <= 25; i++) {
-            panelListeTeacher.add(new JButton(" Amira dedecker physique 200h "));//Ajouter fonction string avec tt les infos de l'etudiant
+            panelListeTeacher.add(new JLabel("Amira", SwingConstants.CENTER));
+            panelListeTeacher.add(new JLabel("dedecker", SwingConstants.CENTER));
+            panelListeTeacher.add(new JLabel("physique", SwingConstants.CENTER));
+            panelListeTeacher.add(new JLabel("200h", SwingConstants.CENTER));
         }
 
         return panelListeTeacher;
@@ -384,20 +394,41 @@ public class Interface extends JFrame {
 
         return panelAfficherRoom;
     }
+
     private JPanel panelinfoRoom(){
 
-        panelinfoRoom= new JPanel( new GridLayout(1,6));
-        //panelInfoStudent.setPreferredSize(new Dimension(0,40));
-        JLabel jLabelRoomStage= new JLabel("Stage");
-        panelinfoRoom.add(jLabelRoomStage);
-        JLabel jLabelRnumber= new JLabel("Number");
-        panelinfoRoom.add(jLabelRnumber);
-        JLabel jLabelRetat= new JLabel("Etat");
-        panelinfoRoom.add(jLabelRetat);
-        JTextField jtextRechR = new JTextField("Number");
-        panelinfoRoom.add(jtextRechR);//---------------------Ajouter listner
+        panelinfoRoom = new JPanel();
+        panelinfoRoom.setLayout(new BorderLayout());
+        panelinfoRoom.add(panelinfoRrecherche(),BorderLayout.NORTH);
+        panelinfoRoom.add(panelinfoR(),BorderLayout.CENTER);
 
         return panelinfoRoom;
+
+    }
+    private JPanel panelinfoRrecherche(){
+        panelinfoRrecherche = new JPanel();
+        JTextField jtextRechRoom = new JTextField("Number" );
+        jtextRechRoom.setPreferredSize(new Dimension(120,30));
+        JButton jButtonRecherche = new JButton("Search");
+
+        panelinfoRrecherche.add(jtextRechRoom);//---------------------Ajouter listner
+        panelinfoRrecherche.add(jButtonRecherche);//---------------------Ajouter listner
+
+        return panelinfoRrecherche;
+    }
+    private JPanel panelinfoR(){
+
+        panelinfoR= new JPanel( new GridLayout(1,6));
+        panelinfoR.setPreferredSize(new Dimension(0,50));
+
+        JLabel jLabelRoomStage= new JLabel("Stage", SwingConstants.CENTER);
+        panelinfoR.add(jLabelRoomStage);
+        JLabel jLabelRnumber= new JLabel("Number", SwingConstants.CENTER);
+        panelinfoR.add(jLabelRnumber);
+        JLabel jLabelRetat= new JLabel("Etat", SwingConstants.CENTER);
+        panelinfoR.add(jLabelRetat);
+
+        return panelinfoR;
 
     }
     private JPanel panelListeRoom(){
@@ -429,17 +460,18 @@ public class Interface extends JFrame {
 
         return panelAfficherPromo;
     }
+
     private JPanel panelinfoPromo(){
 
         panelinfoPromo= new JPanel( new GridLayout(1,6));
-        //panelInfoStudent.setPreferredSize(new Dimension(0,40));
-        JLabel jLabelPromo= new JLabel("Promo");
+        panelinfoPromo.setPreferredSize(new Dimension(0,50));
+        JLabel jLabelPromo= new JLabel("Promo", SwingConstants.CENTER);
         panelinfoPromo.add(jLabelPromo);
-        JLabel jLabelPannee= new JLabel("Anée");
+        JLabel jLabelPannee= new JLabel("Anée", SwingConstants.CENTER);
         panelinfoPromo.add(jLabelPannee);
-        JLabel jLabelPnbEleve= new JLabel("Nb eleve");
+        JLabel jLabelPnbEleve= new JLabel("Nb eleve", SwingConstants.CENTER);
         panelinfoPromo.add(jLabelPnbEleve);
-        JTextField jtextRechR = new JTextField("Number");
+        JTextField jtextRechR = new JTextField("Number", SwingConstants.CENTER);
         panelinfoPromo.add(jtextRechR);//---------------------Ajouter listner
 
         return panelinfoPromo;
@@ -461,14 +493,8 @@ public class Interface extends JFrame {
 
 /////////////////////////////
 
-    public void ListnerAddTeacher(ActionEvent event) {
-        create_frameAddTeacher();
-    }
     public void ListnerAddCours(ActionEvent event) {
         create_frameAddCours();
-    }
-    public void ListnerAddStudent(ActionEvent event) {
-        create_frameAddStudent();
     }
 
     /* JPanel 'Ajout d'un cours' */
@@ -491,19 +517,6 @@ public class Interface extends JFrame {
         JLabel jlabelHeureFin = new JLabel("Heure de Fin :");//a modifier pour ajouter une horloge
         JComboBox jcmHeureFin = new JComboBox<String>(HorraireFin);
 
-        JButton jButonEnregistre = new JButton("registrer");
-        jButonEnregistre.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-
-                System.out.print(jtfNomClasse.getText());
-                System.out.print(jcmbGroupeClasse.getSelectedItem());
-                System.out.print(jcmbMatiereCours.getSelectedItem());
-                System.out.print(jcmHeureDebut.getSelectedItem());
-                System.out.print(jcmHeureFin.getSelectedItem());
-
-            }
-        });
 
         jPanel.add(jlabelNomClasse);
         jPanel.add(jtfNomClasse);
@@ -515,7 +528,25 @@ public class Interface extends JFrame {
         jPanel.add(jcmHeureDebut);
         jPanel.add(jlabelHeureFin);
         jPanel.add(jcmHeureFin);
-        jPanel.add(jButonEnregistre, BorderLayout.SOUTH);
+
+        JPanel jpanel2 = new JPanel();
+        JButton jButonEnregistre = new JButton("registrer");
+        jButonEnregistre.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+
+                System.out.print(jtfNomClasse.getText());
+                System.out.print(jcmbGroupeClasse.getSelectedItem());
+                System.out.print(jcmbMatiereCours.getSelectedItem());
+                System.out.print(jcmHeureDebut.getSelectedItem());
+                System.out.print(jcmHeureFin.getSelectedItem());
+                JOptionPane.showMessageDialog(jPanel,"Choice register");
+
+            }
+        });
+
+        jpanel2.add(jButonEnregistre);
+
 
         JFrame frameAjoutClasse = new JFrame();
         frameAjoutClasse.setDefaultCloseOperation( DISPOSE_ON_CLOSE );
@@ -525,121 +556,19 @@ public class Interface extends JFrame {
         frameAjoutClasse.setResizable(false);
         frameAjoutClasse.setVisible(true);
         frameAjoutClasse.getContentPane().add(jPanel, BorderLayout.CENTER);
+        frameAjoutClasse.getContentPane().add(jpanel2, BorderLayout.SOUTH);
+
         frameAjoutClasse.setVisible(true);
 
 
         return frameAjoutClasse;
     }
     /* JPanel 'Ajout d'un professeur' */
-    public JFrame create_frameAddTeacher() {
-        JPanel jpanelAddTeacher = new JPanel();
-        jpanelAddTeacher.setLayout(new GridLayout(5,2));
-
-        JLabel jlabelNomProfesseur = new JLabel("Last Name :");
-        JTextField jtfNomProfesseur = new JTextField(10);
-
-        JLabel jlabelPrenomProfesseur = new JLabel("First name :");
-        JTextField jtfPrenomProfesseur = new JTextField(10);
-
-        JLabel jlabelMatiereProfesseur = new JLabel("Classes :");
-        String[] matieres = {"Maths", "Physique", "Physique Appliquée", "Informatique"};
-        JComboBox jcmbMatiereProfesseur = new JComboBox<String>(matieres);
-
-        JLabel jlabelNombreHeureProfesseur = new JLabel("Numbers of hours :");
-        JTextField jtfNombreHeureProfesseur = new JTextField(10);
-
-        JButton jButtonAddProf = new JButton("registre");
-        jButtonAddProf.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-
-                System.out.print(jtfNomProfesseur.getText());
-                System.out.print(jtfNomProfesseur.getText());
-                System.out.print(jcmbMatiereProfesseur.getSelectedItem());
-                System.out.print(jtfNombreHeureProfesseur.getText());
-
-            }
-        });
-
-        jpanelAddTeacher.add(jlabelNomProfesseur);
-        jpanelAddTeacher.add(jtfNomProfesseur);
-        jpanelAddTeacher.add(jlabelPrenomProfesseur);
-        jpanelAddTeacher.add(jtfPrenomProfesseur);
-        jpanelAddTeacher.add(jlabelMatiereProfesseur);
-        jpanelAddTeacher.add(jcmbMatiereProfesseur);
-        jpanelAddTeacher.add(jlabelNombreHeureProfesseur);
-        jpanelAddTeacher.add(jtfNombreHeureProfesseur);
-        jpanelAddTeacher.add(jButtonAddProf,new FlowLayout());
-
-        JFrame frameAddTeacher = new JFrame();
-        frameAddTeacher.setSize(400,300);
-        frameAddTeacher.setTitle("Add teachers");
-        frameAddTeacher.setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        frameAddTeacher.setLocationRelativeTo(null);
-        frameAddTeacher.setResizable(false);//Pour redimensionner la fenetre
-        frameAddTeacher.setVisible(true);
-        frameAddTeacher.getContentPane().add(jpanelAddTeacher, BorderLayout.CENTER);
-        frameAddTeacher.setVisible(true);
-
-        return frameAddTeacher;
-    }
-    /* JPanel 'Ajout d'un eleve' */
-    public JFrame create_frameAddStudent() {
-        JPanel jpanelAddEleve = new JPanel();
-        jpanelAddEleve.setLayout(new GridLayout(5,2));
-
-        JLabel jlabelEleveName = new JLabel("Name :");
-        JTextField jtfEleveName = new JTextField(10);
-
-        JLabel jlabelEleveFirstName = new JLabel("First name :");
-        JTextField jtfEleveFirstName = new JTextField(10);
-
-        JLabel jlabelEleveClasse = new JLabel("Classe :");
-        JComboBox jcmbEleveClasse = new JComboBox<String>();//recuperer les groupes sur mysql
-
-        JLabel jlabelEleveGrp = new JLabel("Promo :");
-        JComboBox jcmbEleveGrp = new JComboBox<String>(niveauxStrings);//recuperer les differentes promos
-
-        JButton jButtonAddEleve = new JButton("registre");
-        jButtonAddEleve.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-
-                System.out.print(jtfEleveName.getText());
-                System.out.print(jtfEleveFirstName.getText());
-                System.out.print(jcmbEleveClasse.getSelectedItem());
-                System.out.print(jcmbEleveGrp.getSelectedItem());
-
-            }
-        });
-
-        jpanelAddEleve.add(jlabelEleveName);
-        jpanelAddEleve.add(jtfEleveName);
-        jpanelAddEleve.add(jlabelEleveFirstName);
-        jpanelAddEleve.add(jtfEleveFirstName);
-        jpanelAddEleve.add(jlabelEleveClasse);
-        jpanelAddEleve.add(jcmbEleveClasse);
-        jpanelAddEleve.add(jlabelEleveGrp);
-        jpanelAddEleve.add(jcmbEleveGrp);
-        jpanelAddEleve.add(jButtonAddEleve);
-
-        JFrame jframeAddEleve = new JFrame();
-        jframeAddEleve.setSize(400,300);
-        jframeAddEleve.setTitle("Ajout d'un élève");
-        jframeAddEleve.setLocationRelativeTo(null);
-        jframeAddEleve.setResizable(false);
-        jframeAddEleve.setVisible(true);
-        jframeAddEleve.setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        jframeAddEleve.getContentPane().add(jpanelAddEleve, BorderLayout.CENTER);
-        jframeAddEleve.setVisible(true);
-
-        return jframeAddEleve;
-    }
 
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel( new NimbusLookAndFeel() );
-        Interface frame = new Interface();
+        ViewRespSco frame = new ViewRespSco();
         frame.setVisible(true);
     }
 }
