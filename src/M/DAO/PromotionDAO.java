@@ -1,6 +1,6 @@
 package M.DAO;
 
-import M.Promotion;
+import  M.Promotion;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -9,13 +9,13 @@ public class Room {
     private int capacity;
     private Site id_site;
 
-    public Room(int id, String name, int capacity, int idSite, List<String> nameSite) {
+    public Room() {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
         this.id_site = new Site(idSite, nameSite);
     }
-public Room(){}
+public Room(int id, String name, String capacity, int id_sit){}
     public int getId() {
         return id;
     }
