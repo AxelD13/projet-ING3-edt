@@ -1,8 +1,7 @@
-package M.DAO;
+package m.dao;
 
-import M.User.*;
+import m.user.*;
 
-import java.security.Permission;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

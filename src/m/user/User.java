@@ -1,6 +1,4 @@
-package M.User;
-
-import java.security.Permission;
+package m.user;
 
 public class User {
     int id;

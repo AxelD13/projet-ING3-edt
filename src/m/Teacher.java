@@ -1,22 +1,41 @@
-package M;
+package m;
 
-import M.User.*;
+import m.user.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Teacher extends User {
+public class Teacher {
 
+    private User user;
+    private Course course;
     private Set<Course> id_course = new HashSet<Course>();
+
+
 
     public Teacher() {}
 
-    public Teacher(String email, String password, String lastName, String firstName) {
-        super(email, password, lastName, firstName, EnumPermission.TEACHER);
+    public Teacher(User user, Course course) {
+        this.user = user;
+        this.course = course;
+
     }
 
-    public Teacher(int id, String email, String password, String lastName, String firstName) {
-        super(id, email, password, lastName, firstName, EnumPermission.TEACHER);
+
+    public User getUser() {
+        return user;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<Course> getId_course() {

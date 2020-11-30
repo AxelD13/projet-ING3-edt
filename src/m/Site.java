@@ -1,14 +1,14 @@
-package M;
+package m;
 
-public class Course {
+public class Site {
     private int id;
     private String name;
 
-    public Course(int id, String name) {
+    public Site(int id, String name) {
         this.id = id;
         this.name = name;
     }
-    public Course() {}
+public Site(){}
 
     public int getId() {
         return id;

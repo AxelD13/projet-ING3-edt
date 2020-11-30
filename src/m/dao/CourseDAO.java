@@ -1,7 +1,5 @@
-package M.DAO;
-
-import M.Course;
-import M.Room;
+package m.dao;
+import m.Course;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -32,15 +30,13 @@ public class CourseDAO extends DAO<Course> {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
-            ).executeQuery("SELECT * FROM room WHERE ID = " + id);
-            if (result.first())
+            ).executeQuery("SELECT * FROM course WHERE ID = " + id);
+            if(result.first())
                 course = new Course(id, result.getString("NAME"));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return course;
     }
 }
-

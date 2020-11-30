@@ -1,7 +1,4 @@
-package M;
-
-import java.util.ArrayList;
-import java.util.List;
+package m;
 
 public class Room {
     private int id;
@@ -9,13 +6,13 @@ public class Room {
     private int capacity;
     private Site id_site;
 
-    public Room() {
+    public Room(int id, String name, int capacity, Site idSite) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
-        this.id_site = new Site(idSite, nameSite);
+        this.id_site = idSite;
     }
-public Room(int id, String name, String capacity, int id_sit){}
+public Room(){}
     public int getId() {
         return id;
     }

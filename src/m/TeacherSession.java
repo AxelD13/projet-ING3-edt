@@ -1,23 +1,24 @@
-package M;
+package m;
 
-import java.util.ArrayList;
+import m.session.Session;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class Teacher_Session {
+public class TeacherSession {
     private Session id_Session;
     private Set<Teacher> id_Teacher = new HashSet<Teacher>();
 
 
-    public Teacher_Session(int id, int week, String date, String start_Time, String end_Time, Session.State state, int idCourse, String name, int idType, Type_Course.Name nameType) {
-        this.id_Session = new Session(id, week, date, start_Time, end_Time, state, idCourse, name, idType, nameType);
+    public TeacherSession(Session id_Session, Set<Teacher> id_Teacher) {
+        this.id_Session = id_Session;
+        this.id_Teacher = id_Teacher;
 
 
     }
 
 
-    public Teacher_Session(){}
+    public TeacherSession(){}
 
     public Session getId_Session() {
         return id_Session;

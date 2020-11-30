@@ -1,22 +1,24 @@
-package M;
+package m;
 
+
+import m.session.Session;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Room_Session {
+public class RoomSession {
     private Session id_Session;
     private Set<Room> id_Room = new HashSet<Room>();
 
 
-    public Room_Session(int id, int week, String date, String start_Time, String end_Time, Session.State state, int idCourse, String name, int idType, Type_Course.Name nameType) {
-        this.id_Session = new Session(id, week, date, start_Time, end_Time, state, idCourse, name, idType, nameType);
-
+    public RoomSession(Session id_Session, Set<Room> id_Room) {
+        this.id_Session = id_Session;
+        this.id_Room = id_Room;
 
 
     }
 
-    public Room_Session(){}
+    public RoomSession(){}
     public Session getId_Session() {
         return id_Session;
     }

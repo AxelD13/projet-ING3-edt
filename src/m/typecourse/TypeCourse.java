@@ -1,16 +1,16 @@
-package M;
+package m.typecourse;
 
-public class Type_Course {
+public class TypeCourse {
     private int id;
-    private Name name;
+    private EnumName name;
 
-    public Type_Course(int id, Name name) {
+    public TypeCourse(int id, EnumName name) {
         this.id = id;
         this.name = name;
     }
 
-    public Type_Course(){}
-    public enum Name{LESSON, TD, TP, PROJECT, SUPPORT}
+    public TypeCourse(){}
+
 
     public int getId() {
         return id;
@@ -20,11 +20,11 @@ public class Type_Course {
         this.id = id;
     }
 
-    public Name getName() {
+    public EnumName getName() {
         return name;
     }
 
-    public void setName(Name name) {
+    public void setName(EnumName name) {
         this.name = name;
     }
 }

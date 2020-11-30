@@ -1,12 +1,15 @@
-package M.DAO;
+package m.dao;
 
-import M.Room;
+import c.Database;
+import m.Room;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoomDAO extends DAO<Room> {
+    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+    Connection cnx = db.connectDB();
 
     public RoomDAO(Connection conn) {
         super(conn);
@@ -26,6 +29,7 @@ public class RoomDAO extends DAO<Room> {
 
     public Room find(int id) {
         Room room = new Room();
+        SiteDAO siteDAO = new SiteDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(
@@ -34,8 +38,8 @@ public class RoomDAO extends DAO<Room> {
             ).executeQuery("SELECT * FROM room WHERE ID = " + id);
             if (result.first())
                 room = new Room(id, result.getString("NAME"),
-                        result.getString("CAPACITY"),
-                        result.getInt("ID_SITE"));
+                        result.getInt("CAPACITY"),
+                        siteDAO.find(result.getInt("ID_SITE")));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,3 +48,5 @@ public class RoomDAO extends DAO<Room> {
         return room;
     }
 }
+
+
