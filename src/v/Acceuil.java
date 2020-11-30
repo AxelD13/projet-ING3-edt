@@ -1,5 +1,5 @@
-package V;
-import Control.Database;
+package v;
+import c.Database;
 
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -14,7 +14,7 @@ public class Acceuil extends JFrame {
 
         this.setTitle("Menu");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(300, 100);
+        this.setSize(400, 100);
         this.setLocationRelativeTo(null); //positionnement de la fenetre au centre
 
         JPanel contentpane = (JPanel) this.getContentPane();

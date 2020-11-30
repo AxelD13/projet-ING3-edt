@@ -1,9 +1,9 @@
-package V;
-import Control.Database;
-import M.DAO.DAO;
-import M.DAO.UserDAO;
-import M.User.EnumPermission;
-import M.User.User;
+package v;
+import c.Database;
+import m.dao.DAO;
+import m.dao.UserDAO;
+import m.user.EnumPermission;
+import m.user.User;
 
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -25,8 +25,8 @@ public class ViewRespSco extends JFrame {
     private final String[] days = {"Lundi", "Mardi", "Mercredi","Jeudi","Vendredi","Samedi"};
     private final String[] listContent = {"EDT", "AfficherE","AfficherT","AfficherR","AfficherP"};
     private CardLayout cardLayout;
-    private JPanel panelmenu,panelprincipal,panelJours,panelsemaine,panelhoraire,panelJoursSemaine,panelEdt, panelAfficherStudent,panelInfoStudent,panelInfoS,panelinfoSrecherche, panelListeStudent,
-            panelAfficherTeacher, panelinfoTeacher,panelListeTeacher, panelAfficherRoom, panelinfoRoom,panelListeRoom,
+    private JPanel panelMenu,panelPrincipal,panelJoursSemaine,panelEdt, panelAfficherStudent,panelInfoStudent,panelInfoS,panelinfoSrecherche, panelListeStudent,
+            panelAfficherTeacher, panelinfoT,panelinfoTeacher,panelListeTeacher,panelinfoTrecherche, panelAfficherRoom, panelinfoRoom, panelinfoR,panelListeRoom,panelinfoRrecherche,
             panelAfficherPromo, panelinfoPromo,panelListePromo;
 
 
@@ -71,7 +71,7 @@ public class ViewRespSco extends JFrame {
         menuBar.setPreferredSize(new Dimension(0,50));
 
         // Définition du menu déroulant "Display" et de son contenu
-        JMenu mnuDisplay = new JMenu( "Afficher");
+        JMenu mnuDisplay = new JMenu( "Add");
         //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
 
         JMenuItem mnuEdT = new JMenuItem( "temp jobs" );
@@ -80,7 +80,7 @@ public class ViewRespSco extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuStudent = new JMenuItem( "Liste des étudiants" );
+        JMenuItem mnuStudent = new JMenuItem( "Student list" );
         mnuStudent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelPrincipal, listContent[1]);
@@ -88,7 +88,7 @@ public class ViewRespSco extends JFrame {
         });
         mnuDisplay.add(mnuStudent);
 
-        JMenuItem mnuTeach = new JMenuItem( "Liste des professeurs" );
+        JMenuItem mnuTeach = new JMenuItem( "Teacher list" );
         mnuTeach.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelPrincipal, listContent[2]);
@@ -106,7 +106,7 @@ public class ViewRespSco extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuFreeRooms = new JMenuItem( "Salles libres" );
+        JMenuItem mnuFreeRooms = new JMenuItem( "Free room" );
         mnuFreeRooms.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelPrincipal, listContent[3]);
@@ -127,13 +127,13 @@ public class ViewRespSco extends JFrame {
         menuBar.add(mnuDisplay);
 
         // Définition du menu déroulant "Ajouter" et de son contenu
-        JMenu mnuEdit = new JMenu( "Ajouter" );
+        JMenu mnuEdit = new JMenu( "Add" );
 
-        JMenuItem mnuAddTeacher = new JMenuItem( "Professeur" );
+        JMenuItem mnuAddTeacher = new JMenuItem( "Teacher" );
         mnuAddTeacher.addActionListener(this::ListnerAddTeacher);
         mnuEdit.add(mnuAddTeacher);
 
-        JMenuItem mnuAddStudent = new JMenuItem( "Etudiant" );
+        JMenuItem mnuAddStudent = new JMenuItem( "Studients" );
         mnuAddStudent.addActionListener(this::ListnerAddStudent);
         mnuEdit.add(mnuAddStudent);
 
@@ -152,13 +152,13 @@ public class ViewRespSco extends JFrame {
         menuBar.add(mnuEdit);
 
         // Définition du menu déroulant "Delete" et de son contenu
-        JMenu mnuDelete = new JMenu( "Supprimer" );
+        JMenu mnuDelete = new JMenu( "Delete" );
 
-        JMenuItem mnuDeleteTeacher = new JMenuItem( "Professeur" );
+        JMenuItem mnuDeleteTeacher = new JMenuItem( "Teacher" );
         mnuDelete.add(mnuDeleteTeacher);
 
 
-        JMenuItem mnuDeleteStudent = new JMenuItem( "Etudiant" );
+        JMenuItem mnuDeleteStudent = new JMenuItem( "Studient" );
         mnuDelete.add(mnuDeleteStudent);
 
         mnuDelete.addSeparator();
@@ -205,7 +205,7 @@ public class ViewRespSco extends JFrame {
     private  JPanel panHeure(){
         JPanel jPanel = new JPanel(new GridLayout(8,1));
         jPanel.setPreferredSize(new Dimension(160,0));
-        jPanel.setBackground(new Color(80,80,200));
+        jPanel.setBackground(new Color(255, 255, 255));
 
         for(String creneau : slots) {
             JLabel jlabel_creneau= new JLabel(creneau, SwingConstants.CENTER);
@@ -232,7 +232,7 @@ public class ViewRespSco extends JFrame {
     /* Methode de construction des boutons semaines*/
     private JPanel panSemaine(){
         JPanel jPanel = new JPanel(new GridLayout(1,30));
-        jPanel.setBackground(new Color(80,80,200));
+        jPanel.setBackground(new Color(255, 255, 255));
         for(int i = 1; i<30;i++ ){
             jPanel.add( new JButton(String.valueOf(i)));
         }
@@ -243,7 +243,7 @@ public class ViewRespSco extends JFrame {
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(37, 253, 233));
+        jPanel.setBackground(new Color(255, 255, 255));
         for (int i = 1; i < 49; i++) {
             jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
         }
@@ -492,21 +492,21 @@ public class ViewRespSco extends JFrame {
     }
 
 /////////////////////////////
-    /*
+
     public void ListnerAddTeacher(ActionEvent event) {
         create_frameAddTeacher();
     }
-    */
+
 
     public void ListnerAddCours(ActionEvent event) {
         create_frameAddCours();
     }
 
-    /*
+
     public void ListnerAddStudent(ActionEvent event) {
         create_frameAddStudent();
     }
-    */
+
 
     // JPanel 'Ajout d'un cours'
     public JFrame create_frameAddCours() {

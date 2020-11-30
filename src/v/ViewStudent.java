@@ -1,12 +1,10 @@
-package V;
+package v;
 
 import javax.swing.*;
-        import java.awt.*;
-
-        import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
-
+import java.awt.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class ViewStudent extends JFrame {
@@ -18,9 +16,7 @@ public class ViewStudent extends JFrame {
     String[] Jours = {"Lundi", "Mardi", "Mercredi","Jeudi","Vendredi","Samedi"};
     private String[] listContent = {"EDT", "AfficherE","AfficherT","AfficherR","AfficherP"};
     private CardLayout cardLayout;
-    private JPanel panelmenu,panelprincipal,panelJours,panelsemaine,panelhoraire,panelJoursSemaine,panelEdt, panelAfficherStudent,panelInfoStudent,panelInfoS,panelinfoSrecherche, panelListeStudent,
-            panelAfficherTeacher, panelinfoTeacher,panelListeTeacher, panelAfficherRoom, panelinfoRoom,panelListeRoom,  panelAfficherPromo, panelinfoPromo,panelListePromo, panelinfoTrecherche,panelinfoT,panelinfoRrecherche,
-            panelinfoR;
+    private JPanel panelmenu,panelprincipal,panelJoursSemaine,panelEdt,panelAfficherRoom, panelinfoRoom,panelListeRoom,panelinfoRrecherche, panelinfoR;
 
 
     /* Construction de l'interface graphique */
@@ -37,7 +33,6 @@ public class ViewStudent extends JFrame {
 
     }
 
-
 /////////////////////////////
 
     private JPanel panelprincipal(){
@@ -46,10 +41,7 @@ public class ViewStudent extends JFrame {
         panelprincipal = new JPanel();
         panelprincipal.setLayout(cardLayout);
         panelprincipal.add(panelEdt(), listContent[0]);
-        //panelprincipal.add(panelAfficherS(), listContent[1]);
-        //panelprincipal.add(panelAfficherT(), listContent[2]);
         panelprincipal.add(panelAfficherR(), listContent[1]);
-        //panelprincipal.add(panelAfficherP(), listContent[2]);
 
         return panelprincipal;
     }
@@ -65,10 +57,8 @@ public class ViewStudent extends JFrame {
 
         // Définition du menu déroulant "Display" et de son contenu
         JMenu mnuDisplay = new JMenu( "Dispaly");
-        //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
 
         JMenuItem mnuEdT = new JMenuItem( "temp jobs" );
-        //mnuEdT.addActionListener( this::mnuNewListener );
         mnuDisplay.add(mnuEdT);
 
         mnuDisplay.addSeparator();
@@ -129,7 +119,7 @@ public class ViewStudent extends JFrame {
     private  JPanel panHeure(){
         JPanel jPanel = new JPanel(new GridLayout(8,1));
         jPanel.setPreferredSize(new Dimension(160,0));
-        jPanel.setBackground(new Color(80,80,200));
+        jPanel.setBackground(new Color(255, 255, 255));
         JLabel jlabel_7H_9H30= new JLabel("7h - 9H30", SwingConstants.CENTER);
         jPanel.add(jlabel_7H_9H30);
         JLabel jlabel_9H30_11H= new JLabel("9H30 - 11H", SwingConstants.CENTER);
@@ -174,7 +164,7 @@ public class ViewStudent extends JFrame {
     private JPanel panSemaine(){
 
         JPanel jPanel = new JPanel(new GridLayout(1,30));
-        jPanel.setBackground(new Color(80,80,200));
+        jPanel.setBackground(new Color(255, 255, 255));
         for(int i = 1; i<30;i++ ){
             jPanel.add( new JButton(String.valueOf(i)));
         }
@@ -184,7 +174,7 @@ public class ViewStudent extends JFrame {
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(37, 253, 233));
+        jPanel.setBackground(new Color(255, 255, 255));
         for (int i = 1; i < 49; i++) {
 
             jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
@@ -192,7 +182,7 @@ public class ViewStudent extends JFrame {
         return jPanel;
     }
 
-    /////////////////////////////
+/////////////////////////////
     private JPanel panelAfficherR(){
 
         panelAfficherRoom = new JPanel();
