@@ -1,54 +1,51 @@
 package m.dao;
 
 import c.Database;
-import m.GroupPromotion;
-import m.GroupsSession;
-import m.Room;
+import m.TeacherSession;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GroupsSessionDAO extends DAO<GroupsSession> {
+public class TeacherSessionDAO extends DAO<TeacherSession>{
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
     Connection cnx = db.connectDB();
 
-    public GroupsSessionDAO(Connection conn) {
+    public TeacherSessionDAO(Connection conn) {
         super(conn);
     }
 
-    public boolean create(GroupsSession obj) {
+    public boolean create(TeacherSession obj) {
         return false;
     }
 
-    public boolean delete(GroupsSession obj) {
+    public boolean delete(TeacherSession obj) {
         return false;
     }
 
-    public boolean update(GroupsSession obj) {
+    public boolean update(TeacherSession obj) {
         return false;
     }
 
-    public GroupsSession
-    find(int id) {
-        GroupsSession groupsSession = new GroupsSession();
+    public TeacherSession find(int id) {
+        TeacherSession teacherSession = new TeacherSession();
         SessionDAO sessionDAO = new SessionDAO(cnx);
-        GroupPromotionDAO groupPromotionDAO = new GroupPromotionDAO(cnx);
+        TeacherDAO teacherDAO = new TeacherDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
-            ).executeQuery("SELECT * FROM groups_session WHERE ID_SESSION = " + id);
+            ).executeQuery("SELECT * FROM teachers_session WHERE ID_SESSION = " + id);
             if (result.first())
-                groupsSession = new GroupsSession(
+                teacherSession = new TeacherSession(
                         sessionDAO.find(result.getInt("ID_SESSION")),
-                        groupPromotionDAO.find(result.getInt("ID_GROUP")));
+                        teacherDAO.find(result.getInt("ID_TEACHER")));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return groupsSession;
+        return teacherSession;
     }
 }

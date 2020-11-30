@@ -8,10 +8,10 @@ import java.util.Set;
 
 public class RoomSession {
     private Session id_Session;
-    private Set<Room> id_Room = new HashSet<Room>();
+    private Room id_Room;
 
 
-    public RoomSession(Session id_Session, Set<Room> id_Room) {
+    public RoomSession(Session id_Session, Room id_Room) {
         this.id_Session = id_Session;
         this.id_Room = id_Room;
 
@@ -27,19 +27,11 @@ public class RoomSession {
         this.id_Session = id_Session;
     }
 
-    public Set<Room> getId_Room() {
+    public Room getId_Room() {
         return id_Room;
     }
 
-    public void setId_Room(Set<Room> id_Room) {
+    public void setId_Room(Room id_Room) {
         this.id_Room = id_Room;
-    }
-
-    public void addRoom_Session(Room room){
-        this.id_Room.add(room);
-    }
-
-    public void removeRoom_Session(Room room){
-        this.id_Room.remove(room);
     }
 }
