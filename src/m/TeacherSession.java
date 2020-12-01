@@ -7,10 +7,10 @@ import java.util.Set;
 
 public class TeacherSession {
     private Session id_Session;
-    private Set<Teacher> id_Teacher = new HashSet<Teacher>();
+    private Teacher id_Teacher;
 
 
-    public TeacherSession(Session id_Session, Set<Teacher> id_Teacher) {
+    public TeacherSession(Session id_Session, Teacher id_Teacher) {
         this.id_Session = id_Session;
         this.id_Teacher = id_Teacher;
 
@@ -28,19 +28,11 @@ public class TeacherSession {
         this.id_Session = id_Session;
     }
 
-    public Set<Teacher> getId_Teacher() {
+    public Teacher getId_Teacher() {
         return id_Teacher;
     }
 
-    public void setId_Teacher(Set<Teacher> id_Teacher) {
+    public void setId_Teacher(Teacher id_Teacher) {
         this.id_Teacher = id_Teacher;
-    }
-
-    public void addTeacher_Session(Teacher teacher){
-        this.id_Teacher.add(teacher);
-    }
-
-    public void removeTeacher_Session(Teacher teacher){
-        this.id_Teacher.remove(teacher);
     }
 }

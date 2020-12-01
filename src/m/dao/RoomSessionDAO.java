@@ -1,54 +1,53 @@
 package m.dao;
 
 import c.Database;
-import m.GroupPromotion;
 import m.GroupsSession;
-import m.Room;
+import m.RoomSession;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GroupsSessionDAO extends DAO<GroupsSession> {
+public class RoomSessionDAO extends DAO<RoomSession> {
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
     Connection cnx = db.connectDB();
 
-    public GroupsSessionDAO(Connection conn) {
+    public RoomSessionDAO(Connection conn) {
         super(conn);
     }
 
-    public boolean create(GroupsSession obj) {
+    public boolean create(RoomSession obj) {
         return false;
     }
 
-    public boolean delete(GroupsSession obj) {
+    public boolean delete(RoomSession obj) {
         return false;
     }
 
-    public boolean update(GroupsSession obj) {
+    public boolean update(RoomSession obj) {
         return false;
     }
 
-    public GroupsSession
+    public RoomSession
     find(int id) {
-        GroupsSession groupsSession = new GroupsSession();
+        RoomSession roomSession = new RoomSession();
         SessionDAO sessionDAO = new SessionDAO(cnx);
-        GroupPromotionDAO groupPromotionDAO = new GroupPromotionDAO(cnx);
+        RoomDAO roomDAO = new RoomDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
-            ).executeQuery("SELECT * FROM groups_session WHERE ID_SESSION = " + id);
+            ).executeQuery("SELECT * FROM rooms_session WHERE ID_SESSION = " + id);
             if (result.first())
-                groupsSession = new GroupsSession(
+                roomSession = new RoomSession(
                         sessionDAO.find(result.getInt("ID_SESSION")),
-                        groupPromotionDAO.find(result.getInt("ID_GROUP")));
+                        roomDAO.find(result.getInt("ID_ROOM")));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return groupsSession;
+        return roomSession;
     }
 }

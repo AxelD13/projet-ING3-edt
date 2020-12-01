@@ -104,15 +104,25 @@ public class TestDAO {
             System.out.println("Session N°" + session.getId()+ "  - Week : " + session.getWeek()+ "  - Date :  " +session.getDate()+ "  -StartTime :  " +session.getStart_Time()+ "  -EndTime :  " +session.getEnd_Time()+ "  -State :  " +session.getState()+ "  -Course :  " +session.getId_Course().getName()+ "  -Type :  " +session.getId_Type().getName()     );
         }
 
-       /* DAO<GroupsSession> groupsSessionDAO = new GroupsSessionDAO(cnx);
+        DAO<GroupsSession> groupsSessionDAO = new GroupsSessionDAO(cnx);
         for(int i = 1; i < 13; i++){
             GroupsSession groupsSession = groupsSessionDAO.find(i);
-            System.out.println("Group_session : Session N°" + groupsSession.getId_Session().getId() );+ "  - Week : " + groupsSession.getId_Session().getWeek()+ "  - Date :  " +groupsSession.getId_Session().getDate()+ "  -StartTime :  " +groupsSession.getId_Session().getStart_Time()+ "  -EndTime :  " +groupsSession.getId_Session().getEnd_Time()+ "  -State :  " +groupsSession.getId_Session().getState()+ "  -Course :  " +groupsSession.getId_Session().getId_Course().getName()+ "  -Type :  " +groupsSession.getId_Session().getId_Type().getName()+ "  -Group :  " +groupsSession.getId_Group().getName()+ "  -Promotion :  " +groupsSession.getId_Group().getId_promotion().getName() );
+            System.out.println("Group_session : Session N°" + groupsSession.getId_Session().getId() + "  - Week : " + groupsSession.getId_Session().getWeek()+ "  - Date :  " +groupsSession.getId_Session().getDate()+ "  -StartTime :  " +groupsSession.getId_Session().getStart_Time()+ "  -EndTime :  " +groupsSession.getId_Session().getEnd_Time()+ "  -State :  " +groupsSession.getId_Session().getState()+ "  -Course :  " +groupsSession.getId_Session().getId_Course().getName()+ "  -Type :  " +groupsSession.getId_Session().getId_Type().getName()+ "  -Group :  " +groupsSession.getId_Group().getName()+ "  -Promotion :  " +groupsSession.getId_Group().getId_promotion().getName() );
+        }
+
+        DAO<TeacherSession> teacherSessionDAO = new TeacherSessionDAO(cnx);
+        for(int i = 1; i < 13; i++){
+            TeacherSession teacherSession = teacherSessionDAO.find(i);
+            System.out.println("Teacher_session : Session N°" + teacherSession.getId_Session().getId() + "  - Week : " + teacherSession.getId_Session().getWeek()+ "  - Date :  " +teacherSession.getId_Session().getDate()+ "  -StartTime :  " +teacherSession.getId_Session().getStart_Time()+ "  -EndTime :  " +teacherSession.getId_Session().getEnd_Time()+ "  -State :  " +teacherSession.getId_Session().getState()+ "  -Course :  " +teacherSession.getId_Session().getId_Course().getName()+ "  -Type :  " +teacherSession.getId_Session().getId_Type().getName()+ "  -Teacher N° :  " +teacherSession.getId_Teacher().getUser().getId()+ "  -  " +teacherSession.getId_Teacher().getUser().getEmail()+ "  -  " +teacherSession.getId_Teacher().getUser().getPassword()+ "  -  " +teacherSession.getId_Teacher().getUser().getLastName()+ "  -  " +teacherSession.getId_Teacher().getUser().getFirstName()+ "  -  " +teacherSession.getId_Teacher().getUser().getPermission()+ "  -Cours" +teacherSession.getId_Teacher().getCourse().getName());
+        }
+
+        DAO<RoomSession> roomSessionDAO = new RoomSessionDAO(cnx);
+        for(int i = 1; i < 13; i++){
+            RoomSession roomSession = roomSessionDAO.find(i);
+            System.out.println("Room_session : Session N°" + roomSession.getId_Session().getId() + "  - Week : " + roomSession.getId_Session().getWeek()+ "  - Date :  " +roomSession.getId_Session().getDate()+ "  -StartTime :  " +roomSession.getId_Session().getStart_Time()+ "  -EndTime :  " +roomSession.getId_Session().getEnd_Time()+ "  -State :  " +roomSession.getId_Session().getState()+ "  -Course :  " +roomSession.getId_Session().getId_Course().getName()+ "  -Type :  " +roomSession.getId_Session().getId_Type().getName()+ "  -Room N° :  " +roomSession.getId_Room().getId()+ "  -  " +roomSession.getId_Room().getName()+ "  -Capacity  " +roomSession.getId_Room().getCapacity()+ "  - Site " +roomSession.getId_Room().getId_site().getName());
         }
 
 
-
-        */
     }
 }
 
