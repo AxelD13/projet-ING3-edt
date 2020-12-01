@@ -1,5 +1,7 @@
 package v;
 
+import org.jfree.ui.RefineryUtilities;
+
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -69,7 +71,20 @@ public class ViewStudent extends JFrame {
                 cardLayout.show(panelprincipal, listContent[1]);
             }
         });
+
         mnuDisplay.add(mnufreerooms);
+
+        mnuDisplay.addSeparator();
+
+        JMenuItem mnuDiag = new JMenuItem( "diagram" );
+        mnuDiag.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent event) {
+             PieChart test = new PieChart("Pie Chart");
+             test.pack();
+             RefineryUtilities.centerFrameOnScreen(test);
+             test.setVisible(true);
+         }
+        });
+        mnuDisplay.add(mnuDiag);
 
         mnuDisplay.addSeparator();
 
