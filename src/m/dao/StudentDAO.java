@@ -1,14 +1,12 @@
 package m.dao;
-
 import c.Database;
-
 import m.Student;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class StudentDAO extends DAO<Student>{
+public class StudentDAO extends DAO<Student> {
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
     Connection cnx = db.connectDB();
 

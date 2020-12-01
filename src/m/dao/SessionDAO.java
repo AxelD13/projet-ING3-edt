@@ -3,8 +3,6 @@ package m.dao;
 import c.Database;
 import m.session.EnumState;
 import m.session.Session;
-import m.typecourse.EnumName;
-import m.typecourse.TypeCourse;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,5 +1,5 @@
-import Control.Database;
-import V.Acceuil;
+import c.Database;
+import v.Acceuil;
 import java.sql.*;
 
 public class Main {

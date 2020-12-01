@@ -1,9 +1,7 @@
 package m.dao;
 
 import c.Database;
-import m.GroupPromotion;
 import m.GroupsSession;
-import m.Room;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

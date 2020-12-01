@@ -1,4 +1,4 @@
-package Control;
+package c;
 
 import java.sql.*;
 import java.util.Scanner;

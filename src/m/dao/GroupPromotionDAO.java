@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GroupPromotionDAO extends DAO<GroupPromotion>{
+public class GroupPromotionDAO extends DAO<GroupPromotion> {
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
     Connection cnx = db.connectDB();
 
