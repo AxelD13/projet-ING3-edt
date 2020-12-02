@@ -17,11 +17,22 @@ public class PromotionDAO extends DAO<Promotion> {
     }
 
     public boolean create(Promotion obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO promotion(NAME)" +
+                    "values( '" + obj.getName()+ "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Promotion obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM promotion WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(Promotion obj) {

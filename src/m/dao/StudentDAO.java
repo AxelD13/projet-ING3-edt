@@ -21,11 +21,22 @@ public class StudentDAO extends DAO<Student>{
     }
 
     public boolean create(Student obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO student(ID_USER, NUMBER, ID_GROUP_PROMOTION)" +
+                    "values('" + obj.getId() + "', '" + obj.getNumber() + "', '" + obj.getIdGroupPromotion()+ "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Student obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM student WHERE ID_USER =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(Student obj) {

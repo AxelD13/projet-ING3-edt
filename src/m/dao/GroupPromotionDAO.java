@@ -20,11 +20,22 @@ public class GroupPromotionDAO extends DAO<GroupPromotion>{
     }
 
     public boolean create(GroupPromotion obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO group_promotion(NAME, ID_PROMOTION)" +
+                    "values('" + obj.getName() + "', '" + obj.getIdPromotion() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(GroupPromotion obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM group_promotion WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(GroupPromotion obj) {

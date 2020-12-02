@@ -17,11 +17,23 @@ public class TypeCourseDAO extends DAO<TypeCourse> {
     }
 
     public boolean create(TypeCourse obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO type_course(NAME)" +
+                    "values('" + obj.getName()
+                    + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(TypeCourse obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM type_course WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(TypeCourse obj) {

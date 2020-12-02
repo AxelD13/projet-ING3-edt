@@ -14,11 +14,22 @@ public class CourseDAO extends DAO<Course> {
     }
 
     public boolean create(Course obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO course(NAME)" +
+                    "values('" + obj.getName() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Course obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM course WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(Course obj) {
