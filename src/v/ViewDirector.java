@@ -1,13 +1,11 @@
 package v;
 
-import c.Database;
-
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
+import java.util.ArrayList;
 
 public class ViewDirector extends JFrame {
 
@@ -20,14 +18,15 @@ public class ViewDirector extends JFrame {
     private String[] listPromo = {"0", "1", "2", "3", "4", "5"};
     private String[] listTeacher = {"0", "1"};
     private String[] listStudent = {"0", "1"};
-    private CardLayout cardLayout, cardLayoutPromo, cardLayoutTeacher,cardLayoutStudent;
-    private JPanel panelmenu, panelprincipal, panelJoursSemaine, panelEdt, panelAfficherStudent, panelAfficherStudentR, panelInfoStudent, panelInfoS, panelinfoSrecherche, panelListeStudent,
-            panelAfficherTeacher, panelinfoTeacher, panelListeTeacher, panelAfficherRoom, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelinfoPromo, panelListePromo, panelinfoTrecherche, panelinfoT, panelinfoRrecherche,
-            panelinfoR, panelListeEleveP;
+    private String[] listDeleteCours = {"0", "1","2","3","4","5"};
+    private CardLayout cardLayout, cardLayoutPromo, cardLayoutTeacher,cardLayoutStudent, cardLayoutDeleteCours;
+    private JPanel panelmenu, panelprincipal, panelJoursSemaine, panelEdt, panelAfficherStudent, panelInfoStudent, panelInfoS, panelinfoSrecherche, panelListeStudent,
+            panelAfficherTeacher, panelinfoTeacher, panelListeTeacher, panelAfficherRoom, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelListePromo, panelinfoTrecherche, panelinfoT, panelinfoRrecherche,
+            panelinfoR, panelListeEleveP, panelPrincipalFinal;
 
 
     /* Construction de l'interface graphique */
-    public ViewDirector(Database db, Connection cnx, int IdUser) {
+    public ViewDirector() {
         super("Mon emploi du temps");
         this.setSize(1200, 800);//Largeur; Hauter
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,11 +65,11 @@ public class ViewDirector extends JFrame {
         menuBar.setPreferredSize(new Dimension(0, 50));
 
         // Définition du menu déroulant "Display" et de son contenu
-        JMenu mnuDisplay = new JMenu("Afficher");
+        JMenu mnuDisplay = new JMenu("Dispaly");
         //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
 
 
-        JMenuItem mnuStudent = new JMenuItem("Liste étudiants");
+        JMenuItem mnuStudent = new JMenuItem("Student list");
         mnuStudent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[1]);
@@ -78,7 +77,7 @@ public class ViewDirector extends JFrame {
         });
         mnuDisplay.add(mnuStudent);
 
-        JMenuItem mnuTeach = new JMenuItem("Liste professeurs");
+        JMenuItem mnuTeach = new JMenuItem("Teacher list");
         mnuTeach.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[2]);
@@ -86,7 +85,7 @@ public class ViewDirector extends JFrame {
         });
         mnuDisplay.add(mnuTeach);
 
-        JMenuItem mnuPromos = new JMenuItem("Liste promos");
+        JMenuItem mnuPromos = new JMenuItem("Promos list");
         mnuPromos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[4]);
@@ -96,7 +95,7 @@ public class ViewDirector extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnufreerooms = new JMenuItem("Salles libres");
+        JMenuItem mnufreerooms = new JMenuItem("Free rooms");
         mnufreerooms.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[3]);
@@ -106,7 +105,7 @@ public class ViewDirector extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuExit = new JMenuItem("Sortie");
+        JMenuItem mnuExit = new JMenuItem("Exit");
         mnuExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayoutPromo.show(panelAfficherPromo, listPromo[0]);
@@ -118,7 +117,7 @@ public class ViewDirector extends JFrame {
         menuBar.add(mnuDisplay);
 
         // Définition du menu déroulant "Ajouter" et de son contenu
-        JMenu mnuEdit = new JMenu("Ajouter");
+        JMenu mnuEdit = new JMenu("Add");
 
         JMenuItem mnuAddTeacher = new JMenuItem("Teacher");
         mnuAddTeacher.addActionListener(this::ListnerAddTeacher);
@@ -847,12 +846,165 @@ public class ViewDirector extends JFrame {
         return jframeAddEleve;
     }
 
+/////////////////////////////
+
+    public JFrame DeleteframeCours(ArrayList coursIng1, ArrayList coursIng2,ArrayList coursIng3,ArrayList coursIng4, ArrayList coursIng5) {
+
+        JFrame frameDeleteCours = new JFrame();
+        frameDeleteCours.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frameDeleteCours.setSize(800, 600);
+        frameDeleteCours.setTitle("Delete Cours");
+        frameDeleteCours.setLocationRelativeTo(null);
+        frameDeleteCours.setResizable(false);
+        frameDeleteCours.setVisible(true);
+        frameDeleteCours.getContentPane().add(DeleteCours0(coursIng1,coursIng2,coursIng3,coursIng4,coursIng5));
+        frameDeleteCours.setVisible(true);
+
+        return frameDeleteCours;
+    }
+
+    private JPanel DeleteCours0(ArrayList coursIng1, ArrayList coursIng2,ArrayList coursIng3,ArrayList coursIng4, ArrayList coursIng5){
+        // il faut sans doute mettre tt les listes de tt les cours
+
+        cardLayoutDeleteCours = new CardLayout();
+        panelPrincipalFinal = new JPanel();
+        panelPrincipalFinal.setLayout(cardLayoutDeleteCours);
+        panelPrincipalFinal.add(DeleteCours1(), listDeleteCours[0]);
+        panelPrincipalFinal.add(DeleteCours2(coursIng1), listDeleteCours[1]);
+        panelPrincipalFinal.add(DeleteCours2(coursIng2), listDeleteCours[2]);
+        panelPrincipalFinal.add(DeleteCours2(coursIng3), listDeleteCours[3]);
+        panelPrincipalFinal.add(DeleteCours2(coursIng4), listDeleteCours[4]);
+        panelPrincipalFinal.add(DeleteCours2(coursIng5), listDeleteCours[5]);
+
+        return panelPrincipalFinal;
+    }
+
+    private JPanel DeleteCours2(ArrayList cours){
+        JPanel jpanel = new JPanel(new GridLayout(cours.size(),1));
+        for (int i = 1; i <= cours.size(); i++) {
+            jpanel.add(new JButton(" Maths"));
+            //panelListeStudent.add(new JLabel(listeTtEleves[i].getPrenom, SwingConstants.CENTER));
+            jpanel.add(new JLabel(" Dedecker", SwingConstants.CENTER));
+            jpanel.add(new JLabel(" ING 3", SwingConstants.CENTER));
+            jpanel.add(new JLabel(" 9h30", SwingConstants.CENTER));
+            jpanel.add(new JLabel(" 11h", SwingConstants.CENTER));
+            jpanel.add(new JLabel(" 22/12/00", SwingConstants.CENTER));
+            JButton JboutonChoice = new JButton(" Choice");
+            jpanel.add(JboutonChoice);
+            JboutonChoice.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    //Supprimer de la base de donnée alors
+                    JOptionPane.showMessageDialog(jpanel, "Choice register");
+
+                }
+            });
+
+        }
+        return jpanel;
+
+    }
+
+    private JPanel DeleteCours1(){
+
+    JPanel jPanelNorth = new JPanel();
+    JLabel jlabel= new JLabel("In wich promotion would you delete cours ?");
+    jPanelNorth.add(jlabel);
+    JPanel jPanelPromo= new JPanel(new GridLayout(5, 1));
+    JButton PromoING1 = new JButton("ING 1");
+    JButton PromoING2 = new JButton("ING 2");
+    JButton PromoING3 = new JButton("ING 3");
+    JButton PromoING4 = new JButton("ING 4");
+    JButton PromoING5 = new JButton("ING 5");
+    jPanelPromo.add((PromoING1));
+    jPanelPromo.add((PromoING2));
+    jPanelPromo.add((PromoING3));
+    jPanelPromo.add((PromoING4));
+    jPanelPromo.add((PromoING5));
+    JPanel panelfinal = new JPanel();
+    panelfinal.add(jPanelNorth,BorderLayout.NORTH);
+    panelfinal.add(jPanelPromo,BorderLayout.CENTER);
+
+
+        PromoING1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutDeleteCours.show(panelPrincipalFinal, listDeleteCours[1]);
+            }
+        });
+        PromoING2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutDeleteCours.show(panelPrincipalFinal, listDeleteCours[2]);
+
+            }
+        });
+        PromoING3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutDeleteCours.show(panelPrincipalFinal, listDeleteCours[3]);
+
+            }
+        });
+        PromoING4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutDeleteCours.show(panelPrincipalFinal, listDeleteCours[4]);
+
+            }
+        });
+        PromoING5.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutDeleteCours.show(panelPrincipalFinal, listDeleteCours[5]);
+
+            }
+        });
+
+    return panelfinal;
+
+}
+
+/////////////////////////////
+
+    public JFrame DeleteframeTeachers(ArrayList listTeachers){
+
+        JFrame frameDeleteTeachers = new JFrame();
+        frameDeleteTeachers.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frameDeleteTeachers.setSize(800, 600);
+        frameDeleteTeachers.setTitle("Delete Teachers");
+        frameDeleteTeachers.setLocationRelativeTo(null);
+        frameDeleteTeachers.setResizable(false);
+        frameDeleteTeachers.setVisible(true);
+        frameDeleteTeachers.getContentPane().add(DeleteTeachers(listTeachers));
+        frameDeleteTeachers.setVisible(true);
+
+        return frameDeleteTeachers;
+    }
+
+    private JPanel DeleteTeachers(ArrayList Teachers){
+        JPanel jpanel = new JPanel(new GridLayout(Teachers.size(),1));
+        for (int i = 1; i <= Teachers.size(); i++) {
+            jpanel.add(new JButton(" Maths"));
+            //panelListeStudent.add(new JLabel(listeTtEleves[i].getPrenom, SwingConstants.CENTER));
+            jpanel.add(new JLabel(" Dedecker", SwingConstants.CENTER));
+            JButton JboutonChoice = new JButton(" Choice");
+            jpanel.add(JboutonChoice);
+            JboutonChoice.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    //Supprimer de la base de donnée alors
+                    JOptionPane.showMessageDialog(jpanel, "Choice register");
+
+                }
+            });
+
+        }
+        return jpanel;
+
+    }
+
+/////////////////////////////
+
+
+/////////////////////////////
 
     public static void main(String[] args) throws Exception {
-        Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
-        Connection cnx = db.connectDB();
-        UIManager.setLookAndFeel( new NimbusLookAndFeel() );
-        ViewDirector frame = new ViewDirector(db, cnx, 39);
+        UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        ViewDirector frame = new ViewDirector();
         frame.setVisible(true);
     }
 }

@@ -1,13 +1,10 @@
 package v;
 
-import c.Database;
-
 import javax.swing.*;
-        import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
-import java.sql.Connection;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ViewTeacher extends JFrame {
 
@@ -17,14 +14,16 @@ public class ViewTeacher extends JFrame {
     String[] matieres = {"Maths", "Physique", "Physique Appliquée", "Informatique", "LV1", "LV2", "Analyse financiere"};
     String[] Jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
     private String[] listContent = {"EDT", "AfficherE", "AfficherT", "AfficherR", "AfficherP"};
-    private CardLayout cardLayout;
-    private JPanel panelmenu, panelprincipal, panelJours, panelsemaine, panelhoraire, panelJoursSemaine, panelEdt, panelAfficherStudent, panelInfoStudent, panelInfoS, panelinfoSrecherche, panelListeStudent,
-            panelAfficherTeacher, panelinfoTeacher, panelListeTeacher, panelAfficherRoom, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelinfoPromo, panelListePromo, panelinfoTrecherche, panelinfoT, panelinfoRrecherche,
-            panelinfoR;
+    private String[] listPromo = {"0", "1", "2", "3", "4", "5"};
+    private String[] listStudent = {"0", "1"};
+    private CardLayout cardLayout, cardLayoutPromo,cardLayoutStudent;
+
+    private JPanel panelmenu, panelprincipal, panelJoursSemaine, panelEdt, panelAfficherStudent, panelInfoStudent, panelInfoS, panelinfoSrecherche, panelListeStudent,
+           panelAfficherRoom,panelListeEleveP, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelListePromo,panelinfoRrecherche, panelinfoR;
 
 
     /* Construction de l'interface graphique */
-    public ViewTeacher(Database db, Connection cnx, int idUser) {
+    public ViewTeacher() {
         super("Mon emploi du temps");
         this.setSize(1200, 800);//Largeur; Hauter
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,12 +62,9 @@ public class ViewTeacher extends JFrame {
 
         // Définition du menu déroulant "Display" et de son contenu
         JMenu mnuDisplay = new JMenu("Dispaly");
-        //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
 
         JMenuItem mnuEdT = new JMenuItem("temp jobs");
-        //mnuEdT.addActionListener( this::mnuNewListener );
         mnuDisplay.add(mnuEdT);
-
         mnuDisplay.addSeparator();
 
         JMenuItem mnuStudent = new JMenuItem("Student list");
@@ -111,7 +107,6 @@ public class ViewTeacher extends JFrame {
 
         return menuBar;
     }
-
     /* Construction et injection de la barre de menu*/
     private JPanel panelmenu() {
         panelmenu = new JPanel();
@@ -143,12 +138,11 @@ public class ViewTeacher extends JFrame {
 
         return panelJoursSemaine;
     }
-
     /* Methode de construction des heures */
     private JPanel panHeure() {
         JPanel jPanel = new JPanel(new GridLayout(8, 1));
         jPanel.setPreferredSize(new Dimension(160, 0));
-        jPanel.setBackground(new Color(80, 80, 200));
+        jPanel.setBackground(new Color(255, 255, 255));
         JLabel jlabel_7H_9H30 = new JLabel("7h - 9H30", SwingConstants.CENTER);
         jPanel.add(jlabel_7H_9H30);
         JLabel jlabel_9H30_11H = new JLabel("9H30 - 11H", SwingConstants.CENTER);
@@ -168,7 +162,6 @@ public class ViewTeacher extends JFrame {
 
         return jPanel;
     }
-
     /* Methode de construction des jours de la semaines*/
     private JPanel panJours() {
 
@@ -190,23 +183,21 @@ public class ViewTeacher extends JFrame {
 
         return jPanel1;
     }
-
     /* Methode de construction des boutons semaines*/
     private JPanel panSemaine() {
 
         JPanel jPanel = new JPanel(new GridLayout(1, 30));
-        jPanel.setBackground(new Color(80, 80, 200));
+        jPanel.setBackground(new Color(255, 255, 255));
         for (int i = 1; i < 30; i++) {
             jPanel.add(new JButton(String.valueOf(i)));
         }
 
         return jPanel;
     }
-
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(37, 253, 233));
+        jPanel.setBackground(new Color(255, 255, 255));
         for (int i = 1; i < 49; i++) {
 
             jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
@@ -216,19 +207,29 @@ public class ViewTeacher extends JFrame {
 
 /////////////////////////////
 
-    private JPanel panelAfficherS() {
-
+    private JPanel panelAfficherS(){
+        cardLayoutStudent = new CardLayout();
         panelAfficherStudent = new JPanel();
-        panelAfficherStudent.setLayout(new BorderLayout());//////Probleme ici
-        panelAfficherStudent.add(panelInfoStudent(), BorderLayout.NORTH);
-
-        JScrollPane jScrollPaneS = new JScrollPane(panelListeStudent());
-        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
-        panelAfficherStudent.add(jScrollPaneS, BorderLayout.CENTER);
-
+        panelAfficherStudent.setLayout(cardLayoutStudent);
+        panelAfficherStudent.add(panelAfficherS2(), listStudent[0]);
+        //panelAfficherStudent.add(panelAfficherS2(Stud1), listTeacher[0]);//prof1 Fonction qui retourne tt les eleves
+        //panelAfficherStudent.add(panelAfficherS2(Stud2), listTeacher[1]);// prof2 fonction qui retourne une liste de eleve en fonction du nom
         return panelAfficherStudent;
     }
 
+    //private JPanel panelAfficherS2(list listStudient){
+    private JPanel panelAfficherS2() {
+
+        JPanel jpanel = new JPanel();
+        jpanel.setLayout(new BorderLayout());
+        jpanel.add(panelInfoStudent(), BorderLayout.NORTH);
+
+        JScrollPane jScrollPaneS = new JScrollPane(panelListeStudent(50));///////////////////NB eleve----------------et ajouter liste des studient
+        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
+        jpanel.add(jScrollPaneS, BorderLayout.CENTER);
+
+        return jpanel;
+    }
     private JPanel panelInfoStudent() {
 
         panelInfoStudent = new JPanel();
@@ -238,7 +239,7 @@ public class ViewTeacher extends JFrame {
 
         return panelInfoStudent;
     }
-
+    //private JPanel panelinfoSrecherche(list listTtLesEleves){
     private JPanel panelinfoSrecherche() {
         panelinfoSrecherche = new JPanel();
         JTextField jtextRechSNom = new JTextField("Nom");
@@ -246,15 +247,46 @@ public class ViewTeacher extends JFrame {
         JTextField jtextRechPrenom = new JTextField("Prenom");
         jtextRechPrenom.setPreferredSize(new Dimension(120, 30));
         JButton jButtonRecherche = new JButton("Search");
+        JButton jButtonRetour = new JButton("Retour");
 
-        panelinfoSrecherche.add(jtextRechSNom);//---------------------Ajouter listner
-        panelinfoSrecherche.add(jtextRechPrenom);//---------------------Ajouter listner
-        panelinfoSrecherche.add(jButtonRecherche);//---------------------Ajouter listner
+        panelinfoSrecherche.add(jtextRechSNom);
+        panelinfoSrecherche.add(jtextRechPrenom);
+        panelinfoSrecherche.add(jButtonRecherche);
+        panelinfoSrecherche.add(jButtonRetour, BorderLayout.WEST);
 
+        jButtonRetour.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutPromo.show(panelAfficherPromo, listPromo[0]);
+                //cardLayout.show(panelprincipal, listContent[0]);
+            }
+        });
+
+        jButtonRecherche.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                String Name = jtextRechSNom.getText();
+                String FirstName = jtextRechPrenom.getText();
+                    /*
+                    for(int i = 0; i<listeEleve.size() ; i++ ) {
+                        if( Name.equals(listEleve[i].name) ){
+
+                            /////// Fenetre qui va s'executer lorsque l'on va enclencher la rechercher d'un etudiant, Je vois bien un truc genre parcourir tt le liste
+                            /////// d'étudiant et la mettre dans une nouvelle liste car possibilite de doublons et par la suite afficher tt cela
+                               cardLayoutPromo.show(panelAfficherS2, listStudent[1]);
+
+                        }
+                    }
+
+                    else(){
+                   JOptionPane.showMessageDialog(contentpane, status," This eleve doesn't exist", JOptionPane.WARNING_MESSAGE);
+                    }
+                    */
+            }
+
+        });
         return panelinfoSrecherche;
     }
-
     private JPanel panelinfoS() {
+
 
         panelInfoS = new JPanel(new GridLayout(1, 6));
         panelInfoS.setPreferredSize(new Dimension(0, 50));
@@ -275,13 +307,13 @@ public class ViewTeacher extends JFrame {
         return panelInfoS;
 
     }
+    //private JPanel panelListeStudent(list listeTtEleves){
+    private JPanel panelListeStudent(int nbEleve) {
 
-    private JPanel panelListeStudent() {
-
-        panelListeStudent = new JPanel(new GridLayout(50, 1));//remplacer 15 par n etudiants
-        //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
-        for (int i = 1; i <= 50; i++) {
-            panelListeStudent.add(new JLabel(" Francois", SwingConstants.CENTER));//Ajouter fonction string avec tt les infos de l'etudiant
+        panelListeStudent = new JPanel(new GridLayout(nbEleve, 1));//remplacer 15 par n etudiants
+        for (int i = 1; i <= nbEleve; i++) {
+            panelListeStudent.add(new JLabel(" Francois", SwingConstants.CENTER));//
+            //panelListeStudent.add(new JLabel(listeTtEleves[i].getPrenom, SwingConstants.CENTER));
             panelListeStudent.add(new JLabel(" Chevalier", SwingConstants.CENTER));
             panelListeStudent.add(new JLabel(" 2C", SwingConstants.CENTER));
             panelListeStudent.add(new JLabel(" ING 3", SwingConstants.CENTER));
@@ -293,8 +325,7 @@ public class ViewTeacher extends JFrame {
         return panelListeStudent;
     }
 
-
-    /////////////////////////////
+/////////////////////////////
     private JPanel panelAfficherR() {
 
         panelAfficherRoom = new JPanel();
@@ -318,7 +349,6 @@ public class ViewTeacher extends JFrame {
         return panelinfoRoom;
 
     }
-
     private JPanel panelinfoRrecherche() {
         panelinfoRrecherche = new JPanel();
         JTextField jtextRechRoom = new JTextField("Number");
@@ -330,7 +360,6 @@ public class ViewTeacher extends JFrame {
 
         return panelinfoRrecherche;
     }
-
     private JPanel panelinfoR() {
 
         panelinfoR = new JPanel(new GridLayout(1, 6));
@@ -346,7 +375,6 @@ public class ViewTeacher extends JFrame {
         return panelinfoR;
 
     }
-
     private JPanel panelListeRoom() {
 
         panelListeRoom = new JPanel(new GridLayout(50, 1));//remplacer 15 par n etudiants
@@ -366,54 +394,100 @@ public class ViewTeacher extends JFrame {
 
     private JPanel panelAfficherP() {
 
+        cardLayoutPromo = new CardLayout();
         panelAfficherPromo = new JPanel();
-        panelAfficherPromo.setLayout(new BorderLayout());
-        panelAfficherPromo.add(panelinfoPromo(), BorderLayout.NORTH);
-
-        JScrollPane jScrollPaneS = new JScrollPane(panelListePromo());
-        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
-        panelAfficherPromo.add(jScrollPaneS, BorderLayout.CENTER);
+        panelAfficherPromo.setLayout(cardLayoutPromo);
+        panelAfficherPromo.add(panelListePromo(), listPromo[0]);
+        panelAfficherPromo.add(panelpromo2(100), listPromo[1]);///////////////____________Taille promo ++++++++++++ List listrpomo ING1
+        panelAfficherPromo.add(panelpromo2(20), listPromo[2]);///////////////____________Taille promo ++++++++++++ List listrpomo ING2
+        panelAfficherPromo.add(panelpromo2(20), listPromo[3]);///////////////____________Taille promo ++++++++++++ List listrpomo ING3
+        panelAfficherPromo.add(panelpromo2(20), listPromo[4]);///////////////____________Taille promo ++++++++++++ List listrpomo ING4
+        panelAfficherPromo.add(panelpromo2(20), listPromo[5]);///////////////____________Taille promo ++++++++++++ List listrpomo ING5
+        //panelAfficherPromo.add(panelListeEleveP(20,ListEleveING5), listPromo[5]);///////////////____________Taille promo ++++++++++++ List listrpomo ING5
 
         return panelAfficherPromo;
     }
 
-    private JPanel panelinfoPromo() {
+    private JPanel panelpromo2(int TaillePromo) {
 
-        panelinfoPromo = new JPanel(new GridLayout(1, 6));
-        panelinfoPromo.setPreferredSize(new Dimension(0, 50));
-        JLabel jLabelPromo = new JLabel("Promo", SwingConstants.CENTER);
-        panelinfoPromo.add(jLabelPromo);
-        JLabel jLabelPannee = new JLabel("Anée", SwingConstants.CENTER);
-        panelinfoPromo.add(jLabelPannee);
-        JLabel jLabelPnbEleve = new JLabel("Nb eleve", SwingConstants.CENTER);
-        panelinfoPromo.add(jLabelPnbEleve);
-        JTextField jtextRechR = new JTextField("Number", SwingConstants.CENTER);
-        panelinfoPromo.add(jtextRechR);//---------------------Ajouter listner
+        JPanel jpanel = new JPanel();
+        jpanel.setLayout(new BorderLayout());
+        jpanel.add(panelInfoStudent(), BorderLayout.NORTH);
+        JScrollPane jScrollPaneS = new JScrollPane(panelListeEleveP(TaillePromo));
+        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
+        jpanel.add(jScrollPaneS, BorderLayout.CENTER);
 
-        return panelinfoPromo;
-
+        return jpanel;
     }
+    //private JPanel panelListeEleveP(int TaillePromo, List listepromo){
+    private JPanel panelListeEleveP(int TaillePromo) {
 
+        panelListeEleveP = new JPanel();
+        panelListeEleveP.add(panelinfoS(), BorderLayout.NORTH);
+        panelListeEleveP.add(panelListeStudent(TaillePromo), BorderLayout.CENTER, SwingConstants.CENTER);////////////////--------Ajouter une liste des eleves en parametre
+
+        return panelListeEleveP;
+    }
     private JPanel panelListePromo() {
 
-        panelListePromo = new JPanel(new GridLayout(5, 1));//remplacer 15 par n etudiants
-        //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
-        for (int i = 1; i <= 5; i++) {
-            panelListePromo.add(new JButton("ING3 2023 83 "));//Ajouter fonction string avec tt les infos de l'etudiant
+        JPanel jPanelfinal = new JPanel();
+
+        panelListePromo = new JPanel(new GridLayout(5, 1));
+        JButton PromoING1 = new JButton("ING 1");
+        PromoING1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutPromo.show(panelAfficherPromo, listPromo[1]);
+
+                //panelListeEleveP(20);//////Taille promo ing1 +++++++ liste des eleves ing1
+            }
+        });
+        JButton PromoING2 = new JButton("ING 2");
+        PromoING2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                //panelListeEleveP(20);//////Taille promo ing2 +++++++ liste des eleves ing2
+                cardLayoutPromo.show(panelAfficherPromo, listPromo[2]);
+
+            }
+        });
+        JButton PromoING3 = new JButton("ING 3");
+        PromoING3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutPromo.show(panelAfficherPromo, listPromo[3]);
+
+                //panelListeEleveP(20);//////Taille promo ing3 +++++++ liste des eleves ing3
+            }
+        });
+        JButton PromoING4 = new JButton("ING 4");
+        PromoING4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutPromo.show(panelAfficherPromo, listPromo[4]);
+                //panelListeEleveP(20);//////Taille promo ing4 +++++++ liste des eleves ing4
+            }
+        });
+        JButton PromoING5 = new JButton("ING 5");
+        PromoING4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayoutPromo.show(panelAfficherPromo, listPromo[5]);
+                //panelListeEleveP(20);//////Taille promo ing5 +++++++ liste des eleves ing5
+            }
+        });
 
 
-        }
+        panelListePromo.add(PromoING1);
+        panelListePromo.add(PromoING2);
+        panelListePromo.add(PromoING3);
+        panelListePromo.add(PromoING4);
+        panelListePromo.add(PromoING5);
 
         return panelListePromo;
     }
 
+
 /////////////////////////////
 
     public static void main(String[] args) throws Exception {
-        Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
-        Connection cnx = db.connectDB();
         UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        ViewTeacher frame = new ViewTeacher(db, cnx, 41);
+        ViewTeacher frame = new ViewTeacher();
         frame.setVisible(true);
     }
 }
