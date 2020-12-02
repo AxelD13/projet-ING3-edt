@@ -1,16 +1,19 @@
 package m.dao;
 
 import c.Database;
+import m.Course;
 import m.GroupPromotion;
+import m.user.EnumPermission;
+import m.user.User;
 
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GroupPromotionDAO extends DAO<GroupPromotion> {
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
-    Connection cnx = db.connectDB();
+public class GroupPromotionDAO extends DAO<GroupPromotion>{
 
     public GroupPromotionDAO(Connection conn) {
         super(conn);
@@ -29,8 +32,7 @@ public class GroupPromotionDAO extends DAO<GroupPromotion> {
     }
 
     public GroupPromotion find(int id) {
-        //Group_Promotion group_promotion = new Group_Promotion();
-        GroupPromotion group_promotion = new GroupPromotion();
+        GroupPromotion groupPromotion = new GroupPromotion();
 
         try {
             ResultSet result = this.connect.createStatement(
@@ -38,27 +40,42 @@ public class GroupPromotionDAO extends DAO<GroupPromotion> {
                     ResultSet.CONCUR_READ_ONLY
             ).executeQuery("SELECT * FROM group_promotion WHERE ID = " + id);
 
+            if(result.first()) {
+                groupPromotion = new GroupPromotion(id, result.getString("NAME"),
+                        result.getInt("ID_PROMOTION"));
+            }
 
-
-            if(result.first())
-
-            group_promotion.setId(result.getInt("ID"));
-            group_promotion.setName(result.getString("NAME"));
-
-            PromotionDAO promotionDAO = new PromotionDAO(cnx);
-
-
-
-
-            group_promotion.setId_promotion(promotionDAO.find(result.getInt("ID_PROMOTION")));
-
-
-        }
-
-
-        catch (SQLException e) {
+            result.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return group_promotion;
+
+        return groupPromotion;
+    }
+
+    public List<GroupPromotion> getAll() {
+        List<GroupPromotion> listGroupsPromotion = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM group_promotion");
+
+            boolean next = result.next();
+
+            while (next) {
+                listGroupsPromotion.add(new GroupPromotion(result.getInt("ID"), result.getString("NAME"),
+                        result.getInt("ID_PROMOTION")));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listGroupsPromotion;
     }
 }

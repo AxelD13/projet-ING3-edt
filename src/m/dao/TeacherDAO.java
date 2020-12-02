@@ -1,16 +1,19 @@
 package m.dao;
 
 import c.Database;
+import m.Course;
+import m.Student;
 import m.Teacher;
+import m.user.EnumPermission;
+import m.user.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TeacherDAO extends DAO<Teacher> {
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
-    Connection cnx = db.connectDB();
-
 
     public TeacherDAO(Connection conn) {
         super(conn);
@@ -35,25 +38,77 @@ public class TeacherDAO extends DAO<Teacher> {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
-            ).executeQuery("SELECT * FROM teacher WHERE ID_USER = " + id);
+            ).executeQuery("SELECT * FROM user INNER JOIN student s on user.ID = s.ID_USER WHERE ID = " + id);
 
-            UserDAO userDAO = new UserDAO(cnx);
-            CourseDAO courseDAO = new CourseDAO(cnx);
-            if(result.first())
+            if(result.first()) {
+                teacher = new Teacher(id, result.getString("EMAIL"),
+                        result.getString("PASSWORD"),
+                        result.getString("LAST_NAME"),
+                        result.getString("FIRST_NAME"),
+                        getCourses(id));
+            }
 
-                teacher = new Teacher(
-                        userDAO.find(result.getInt("ID_USER")),
-                        courseDAO.find(result.getInt("ID_COURSE"))
-                        );
-
-
-
-
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-
         return teacher;
     }
+
+    public List<Teacher> getAll() {  //retourne une liste de tous les professeurs
+        List<Teacher> listTeachers = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM user RIGHT JOIN teacher t on user.ID = t.ID_USER");
+
+            boolean next = result.next();
+
+            while (next) {
+                listTeachers.add(new Teacher(result.getInt("ID"), result.getString("EMAIL"),
+                        result.getString("PASSWORD"),
+                        result.getString("LAST_NAME"),
+                        result.getString("FIRST_NAME"),
+                        getCourses(result.getInt("ID"))));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listTeachers;
+    }
+
+    public Set<Course> getCourses(int id) {  //retourne un Set des matières enseignées par un professeur
+        Set<Course> hashSetCourses = new HashSet<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM teacher WHERE ID_USER = " + id);
+
+            boolean next = result.next();
+
+            CourseDAO courseDAO = new CourseDAO(this.connect);
+
+            while (next) {
+                hashSetCourses.add(courseDAO.find(result.getInt("ID_COURSE")));
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return hashSetCourses;
+    }
+
 }

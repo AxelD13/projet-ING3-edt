@@ -5,52 +5,45 @@ import m.user.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Teacher {
+public class Teacher extends User {
 
-    private User user;
-    private Course course;
-    private Set<Course> id_course = new HashSet<Course>();
+    private Set<Course> hashSetCourses  = new HashSet<>();
 
-
+    private int nbHours = 0;
 
     public Teacher() {}
 
-    public Teacher(User user, Course course) {
-        this.user = user;
-        this.course = course;
-
+    public Teacher(int idUser, String email, String password, String lastName, String firstName, Set<Course> hashSetCourses) {
+        super(idUser, email, password, lastName, firstName, EnumPermission.TEACHER);
+        this.hashSetCourses.addAll(hashSetCourses);
     }
 
+    public Set<Course> getHashSetCourses() { return hashSetCourses; }
 
-    public User getUser() {
-        return user;
+    public String displayCourses() {
+        String stringCourses = "";
+
+        for(Course course : hashSetCourses) {
+            stringCourses += course.getName();
+            stringCourses += " ";
+        }
+        return stringCourses;
     }
 
-    public Course getCourse() {
-        return course;
+    public void addCourse(Course course){
+        this.hashSetCourses.add(course);
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void removeCourse(Course course){
+        this.hashSetCourses.remove(course);
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public int getNbHours() { return nbHours; }
 
-    public Set<Course> getId_course() {
-        return id_course;
-    }
+    public void updateNbHours(int h) { this.nbHours += h; }
 
-    public void setId_course(Set<Course> id_course) {
-        this.id_course = id_course;
-    }
+    @Override
+    public String toString() { return getLastName() + " " + getFirstName() + " " + displayCourses(); };
+    //problème ici avec hashSetCourses.toString, il faudra sûrement override la fonction toString
 
-    void addCourse(Course course){
-        this.id_course.add(course);
-    }
-
-    void removeCourse(Course course){
-        this.id_course.remove(course);
-    }
 }

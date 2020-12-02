@@ -1,10 +1,13 @@
 package v;
 
+import c.Database;
+
 import javax.swing.*;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+        import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+        import java.awt.*;
+        import java.awt.event.ActionEvent;
+        import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class ViewTeacher extends JFrame {
 
@@ -15,12 +18,13 @@ public class ViewTeacher extends JFrame {
     String[] Jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
     private String[] listContent = {"EDT", "AfficherE", "AfficherT", "AfficherR", "AfficherP"};
     private CardLayout cardLayout;
-    private JPanel panelmenu, panelprincipal, panelJoursSemaine, panelEdt, panelAfficherStudent, panelInfoStudent, panelInfoS, panelinfoSrecherche, panelListeStudent,
-           panelAfficherRoom, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelinfoPromo, panelListePromo,panelinfoRrecherche, panelinfoR;
+    private JPanel panelmenu, panelprincipal, panelJours, panelsemaine, panelhoraire, panelJoursSemaine, panelEdt, panelAfficherStudent, panelInfoStudent, panelInfoS, panelinfoSrecherche, panelListeStudent,
+            panelAfficherTeacher, panelinfoTeacher, panelListeTeacher, panelAfficherRoom, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelinfoPromo, panelListePromo, panelinfoTrecherche, panelinfoT, panelinfoRrecherche,
+            panelinfoR;
 
 
     /* Construction de l'interface graphique */
-    public ViewTeacher() {
+    public ViewTeacher(Database db, Connection cnx, int idUser) {
         super("Mon emploi du temps");
         this.setSize(1200, 800);//Largeur; Hauter
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,9 +63,12 @@ public class ViewTeacher extends JFrame {
 
         // Définition du menu déroulant "Display" et de son contenu
         JMenu mnuDisplay = new JMenu("Dispaly");
+        //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
 
         JMenuItem mnuEdT = new JMenuItem("temp jobs");
+        //mnuEdT.addActionListener( this::mnuNewListener );
         mnuDisplay.add(mnuEdT);
+
         mnuDisplay.addSeparator();
 
         JMenuItem mnuStudent = new JMenuItem("Student list");
@@ -104,6 +111,7 @@ public class ViewTeacher extends JFrame {
 
         return menuBar;
     }
+
     /* Construction et injection de la barre de menu*/
     private JPanel panelmenu() {
         panelmenu = new JPanel();
@@ -135,11 +143,12 @@ public class ViewTeacher extends JFrame {
 
         return panelJoursSemaine;
     }
+
     /* Methode de construction des heures */
     private JPanel panHeure() {
         JPanel jPanel = new JPanel(new GridLayout(8, 1));
         jPanel.setPreferredSize(new Dimension(160, 0));
-        jPanel.setBackground(new Color(255, 255, 255));
+        jPanel.setBackground(new Color(80, 80, 200));
         JLabel jlabel_7H_9H30 = new JLabel("7h - 9H30", SwingConstants.CENTER);
         jPanel.add(jlabel_7H_9H30);
         JLabel jlabel_9H30_11H = new JLabel("9H30 - 11H", SwingConstants.CENTER);
@@ -159,6 +168,7 @@ public class ViewTeacher extends JFrame {
 
         return jPanel;
     }
+
     /* Methode de construction des jours de la semaines*/
     private JPanel panJours() {
 
@@ -180,21 +190,23 @@ public class ViewTeacher extends JFrame {
 
         return jPanel1;
     }
+
     /* Methode de construction des boutons semaines*/
     private JPanel panSemaine() {
 
         JPanel jPanel = new JPanel(new GridLayout(1, 30));
-        jPanel.setBackground(new Color(255, 255, 255));
+        jPanel.setBackground(new Color(80, 80, 200));
         for (int i = 1; i < 30; i++) {
             jPanel.add(new JButton(String.valueOf(i)));
         }
 
         return jPanel;
     }
+
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(255, 255, 255));
+        jPanel.setBackground(new Color(37, 253, 233));
         for (int i = 1; i < 49; i++) {
 
             jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
@@ -226,6 +238,7 @@ public class ViewTeacher extends JFrame {
 
         return panelInfoStudent;
     }
+
     private JPanel panelinfoSrecherche() {
         panelinfoSrecherche = new JPanel();
         JTextField jtextRechSNom = new JTextField("Nom");
@@ -240,6 +253,7 @@ public class ViewTeacher extends JFrame {
 
         return panelinfoSrecherche;
     }
+
     private JPanel panelinfoS() {
 
         panelInfoS = new JPanel(new GridLayout(1, 6));
@@ -261,6 +275,7 @@ public class ViewTeacher extends JFrame {
         return panelInfoS;
 
     }
+
     private JPanel panelListeStudent() {
 
         panelListeStudent = new JPanel(new GridLayout(50, 1));//remplacer 15 par n etudiants
@@ -279,7 +294,7 @@ public class ViewTeacher extends JFrame {
     }
 
 
-/////////////////////////////
+    /////////////////////////////
     private JPanel panelAfficherR() {
 
         panelAfficherRoom = new JPanel();
@@ -303,6 +318,7 @@ public class ViewTeacher extends JFrame {
         return panelinfoRoom;
 
     }
+
     private JPanel panelinfoRrecherche() {
         panelinfoRrecherche = new JPanel();
         JTextField jtextRechRoom = new JTextField("Number");
@@ -314,6 +330,7 @@ public class ViewTeacher extends JFrame {
 
         return panelinfoRrecherche;
     }
+
     private JPanel panelinfoR() {
 
         panelinfoR = new JPanel(new GridLayout(1, 6));
@@ -329,6 +346,7 @@ public class ViewTeacher extends JFrame {
         return panelinfoR;
 
     }
+
     private JPanel panelListeRoom() {
 
         panelListeRoom = new JPanel(new GridLayout(50, 1));//remplacer 15 par n etudiants
@@ -358,6 +376,7 @@ public class ViewTeacher extends JFrame {
 
         return panelAfficherPromo;
     }
+
     private JPanel panelinfoPromo() {
 
         panelinfoPromo = new JPanel(new GridLayout(1, 6));
@@ -374,6 +393,7 @@ public class ViewTeacher extends JFrame {
         return panelinfoPromo;
 
     }
+
     private JPanel panelListePromo() {
 
         panelListePromo = new JPanel(new GridLayout(5, 1));//remplacer 15 par n etudiants
@@ -390,8 +410,10 @@ public class ViewTeacher extends JFrame {
 /////////////////////////////
 
     public static void main(String[] args) throws Exception {
+        Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+        Connection cnx = db.connectDB();
         UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        ViewTeacher frame = new ViewTeacher();
+        ViewTeacher frame = new ViewTeacher(db, cnx, 41);
         frame.setVisible(true);
     }
 }

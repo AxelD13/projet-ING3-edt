@@ -1,7 +1,9 @@
 package v;
 import c.Database;
-import m.dao.DAO;
-import m.dao.UserDAO;
+import m.Student;
+import m.Teacher;
+import m.dao.*;
+import m.Promotion;
 import m.user.EnumPermission;
 import m.user.User;
 
@@ -11,13 +13,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.List;
 
 public class ViewRespSco extends JFrame {
     private final Database db;
     private final Connection cnx;
 
-    private final String[] promos = {"1e année", "2e année", "3e année", "4e année", "5e année"};//different groupe que l'on auar avec groupe.nom
-    private final String[] groups = {"1A", "1B", "2A", "2B", "3A", "3B"};//different groupe que l'on auar avec groupe.nom
+    private final String[] promos = {"1e année", "2e année", "3e année", "4e année", "5e année"}; //different groupe que l'on auar avec groupe.nom
+    private final String[] groups = {"1A", "1B", "2A", "2B", "3A", "3B"}; //different groupe que l'on auar avec groupe.nom
     private final String[] startTime = {"8H00", "9H30", "11H00", "12H30", "14H00","15H30","17H00","18H30"};
     private final String[] endTime = {"9H30", "11H00", "12H30", "14H00","15H30","17H00","18H30","20H00"};
     private final String[] slots = {"8H00 - 9H30", "9H30 - 11H00", "11H00 - 12H30", "12H30 - 14H00", "14H00 - 15H30", "15H30 - 17H00", "18H30 - 20H00"};
@@ -25,13 +28,15 @@ public class ViewRespSco extends JFrame {
     private final String[] days = {"Lundi", "Mardi", "Mercredi","Jeudi","Vendredi","Samedi"};
     private final String[] listContent = {"EDT", "AfficherE","AfficherT","AfficherR","AfficherP"};
     private CardLayout cardLayout;
-    private JPanel panelMenu,panelPrincipal,panelJoursSemaine,panelEdt, panelAfficherStudent,panelInfoStudent,panelInfoS,panelinfoSrecherche, panelListeStudent,
-            panelAfficherTeacher, panelinfoT,panelinfoTeacher,panelListeTeacher,panelinfoTrecherche, panelAfficherRoom, panelinfoRoom, panelinfoR,panelListeRoom,panelinfoRrecherche,
-            panelAfficherPromo, panelinfoPromo,panelListePromo;
+    private JPanel panelMenu, panelPrincipal, panelJours, panelSemaine, panelHoraire,
+            panelJoursSemaine, panelEdt, panelAfficherStudent, panelInfoStudent, panelInfoS,
+            panelinfoSrecherche, panelListeStudent, panelAfficherTeacher, panelinfoTeacher, panelListeTeacher,
+            panelAfficherRoom, panelinfoRoom, panelListeRoom, panelAfficherPromo, panelinfoPromo,
+            panelListePromo, panelinfoT, panelinfoTrecherche, panelinfoR, panelinfoRrecherche;
 
 
     /* Construction de l'interface graphique */
-    public ViewRespSco(Database db, Connection cnx) {
+    public ViewRespSco(Database db, Connection cnx, int idUser) {
         super( "Mon emploi du temps" );
         this.db = db;
         this.cnx = cnx;
@@ -41,14 +46,13 @@ public class ViewRespSco extends JFrame {
         //this.setResizable(false);
         this.setVisible(true);
         this.getContentPane().add(panelmenu(), BorderLayout.NORTH);
-        this.getContentPane().add(panelprincipal(), BorderLayout.CENTER);
+        this.getContentPane().add(panelPrincipal(), BorderLayout.CENTER);
         this.setVisible(true);
     }
 
 /////////////////////////////
 
-    private JPanel panelprincipal(){
-
+    private JPanel panelPrincipal(){
         cardLayout = new CardLayout();
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(cardLayout);
@@ -71,8 +75,8 @@ public class ViewRespSco extends JFrame {
         menuBar.setPreferredSize(new Dimension(0,50));
 
         // Définition du menu déroulant "Display" et de son contenu
-        JMenu mnuDisplay = new JMenu( "Add");
-        //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
+        JMenu mnuDisplay = new JMenu( "Afficher");
+        //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));  // Ajouter de la disantce entre les boutons
 
         JMenuItem mnuEdT = new JMenuItem( "temp jobs" );
         //mnuEdT.addActionListener( this::mnuNewListener );
@@ -80,7 +84,7 @@ public class ViewRespSco extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuStudent = new JMenuItem( "Student list" );
+        JMenuItem mnuStudent = new JMenuItem( "Liste des étudiants" );
         mnuStudent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelPrincipal, listContent[1]);
@@ -88,13 +92,21 @@ public class ViewRespSco extends JFrame {
         });
         mnuDisplay.add(mnuStudent);
 
-        JMenuItem mnuTeach = new JMenuItem( "Teacher list" );
+        JMenuItem mnuTeach = new JMenuItem( "Liste des professeurs" );
         mnuTeach.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelPrincipal, listContent[2]);
             }
         });
         mnuDisplay.add(mnuTeach);
+
+        JMenuItem mnuFreeRooms = new JMenuItem( "Salles libres" );
+        mnuFreeRooms.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                cardLayout.show(panelPrincipal, listContent[3]);
+            }
+        });
+        mnuDisplay.add(mnuFreeRooms);
 
         JMenuItem mnuPromos = new JMenuItem( "Promotions" );
         mnuPromos.addActionListener(new ActionListener() {
@@ -105,14 +117,6 @@ public class ViewRespSco extends JFrame {
         mnuDisplay.add(mnuPromos);
 
         mnuDisplay.addSeparator();
-
-        JMenuItem mnuFreeRooms = new JMenuItem( "Free room" );
-        mnuFreeRooms.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                cardLayout.show(panelPrincipal, listContent[3]);
-            }
-        });
-        mnuDisplay.add(mnuFreeRooms);
 
         mnuDisplay.addSeparator();
 
@@ -127,13 +131,13 @@ public class ViewRespSco extends JFrame {
         menuBar.add(mnuDisplay);
 
         // Définition du menu déroulant "Ajouter" et de son contenu
-        JMenu mnuEdit = new JMenu( "Add" );
+        JMenu mnuEdit = new JMenu( "Ajouter" );
 
-        JMenuItem mnuAddTeacher = new JMenuItem( "Teacher" );
+        JMenuItem mnuAddTeacher = new JMenuItem( "Professeur" );
         mnuAddTeacher.addActionListener(this::ListnerAddTeacher);
         mnuEdit.add(mnuAddTeacher);
 
-        JMenuItem mnuAddStudent = new JMenuItem( "Studients" );
+        JMenuItem mnuAddStudent = new JMenuItem( "Etudiant" );
         mnuAddStudent.addActionListener(this::ListnerAddStudent);
         mnuEdit.add(mnuAddStudent);
 
@@ -152,13 +156,13 @@ public class ViewRespSco extends JFrame {
         menuBar.add(mnuEdit);
 
         // Définition du menu déroulant "Delete" et de son contenu
-        JMenu mnuDelete = new JMenu( "Delete" );
+        JMenu mnuDelete = new JMenu( "Supprimer" );
 
-        JMenuItem mnuDeleteTeacher = new JMenuItem( "Teacher" );
+        JMenuItem mnuDeleteTeacher = new JMenuItem( "Professeur" );
         mnuDelete.add(mnuDeleteTeacher);
 
 
-        JMenuItem mnuDeleteStudent = new JMenuItem( "Studient" );
+        JMenuItem mnuDeleteStudent = new JMenuItem( "Etudiant" );
         mnuDelete.add(mnuDeleteStudent);
 
         mnuDelete.addSeparator();
@@ -170,9 +174,10 @@ public class ViewRespSco extends JFrame {
 
         return menuBar;
     }
+
     /* Construction et injection de la barre de menu*/
     private JPanel panelmenu(){
-        panelMenu =new JPanel();
+        panelMenu = new JPanel();
         this.setJMenuBar( this.createMenuBar() );
         return panelMenu;
     }
@@ -205,7 +210,7 @@ public class ViewRespSco extends JFrame {
     private  JPanel panHeure(){
         JPanel jPanel = new JPanel(new GridLayout(8,1));
         jPanel.setPreferredSize(new Dimension(160,0));
-        jPanel.setBackground(new Color(255, 255, 255));
+        jPanel.setBackground(new Color(80,80,200));
 
         for(String creneau : slots) {
             JLabel jlabel_creneau= new JLabel(creneau, SwingConstants.CENTER);
@@ -232,7 +237,7 @@ public class ViewRespSco extends JFrame {
     /* Methode de construction des boutons semaines*/
     private JPanel panSemaine(){
         JPanel jPanel = new JPanel(new GridLayout(1,30));
-        jPanel.setBackground(new Color(255, 255, 255));
+        jPanel.setBackground(new Color(80,80,200));
         for(int i = 1; i<30;i++ ){
             jPanel.add( new JButton(String.valueOf(i)));
         }
@@ -243,7 +248,7 @@ public class ViewRespSco extends JFrame {
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(255, 255, 255));
+        jPanel.setBackground(new Color(37, 253, 233));
         for (int i = 1; i < 49; i++) {
             jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
         }
@@ -275,13 +280,19 @@ public class ViewRespSco extends JFrame {
 
     private JPanel panelinfoSrecherche(){
         panelinfoSrecherche = new JPanel();
-        JTextField jtextRechSNom = new JTextField("Nom" );
+        JTextField jtextRechSNom = new JTextField();
+        JLabel labelNom = new JLabel("Nom");
+        labelNom.setLabelFor(jtextRechSNom);
         jtextRechSNom.setPreferredSize(new Dimension(120,30));
-        JTextField jtextRechPrenom = new JTextField("Prénom" );
+        JTextField jtextRechPrenom = new JTextField();
+        JLabel labelPrenom = new JLabel("Prénom");
+        labelNom.setLabelFor(jtextRechPrenom);
         jtextRechPrenom.setPreferredSize(new Dimension(120,30));
         JButton jButtonRecherche = new JButton("Rechercher");
 
+        panelinfoSrecherche.add(labelNom);
         panelinfoSrecherche.add(jtextRechSNom);//---------------------Ajouter listner
+        panelinfoSrecherche.add(labelPrenom);
         panelinfoSrecherche.add(jtextRechPrenom);//---------------------Ajouter listner
         panelinfoSrecherche.add(jButtonRecherche);//---------------------Ajouter listner
 
@@ -308,18 +319,21 @@ public class ViewRespSco extends JFrame {
         return panelInfoS;
     }
 
-    private JPanel panelListeStudent(){
-        panelListeStudent = new JPanel(new GridLayout(50,1));//remplacer 15 par n etudiants
-        //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
-        for (int i = 1; i <= 50; i++) {
-            panelListeStudent.add(new JLabel(" Francois", SwingConstants.CENTER));//Ajouter fonction string avec tt les infos de l'etudiant
-            panelListeStudent.add(new JLabel(" Chevalier", SwingConstants.CENTER));
-            panelListeStudent.add(new JLabel(" 2C", SwingConstants.CENTER));
-            panelListeStudent.add(new JLabel(" ING 3", SwingConstants.CENTER));
-            panelListeStudent.add(new JLabel(" 20", SwingConstants.CENTER));
-            panelListeStudent.add(new JLabel(" 0", SwingConstants.CENTER));
+    private JPanel panelListeStudent(){  //version provisoire avec User, sera remplacé par Student ensuite
+        DAO<Student> studentDAO = new StudentDAO(cnx);
+        List<Student> listStudents = studentDAO.getAll();
 
+        panelListeStudent = new JPanel(new GridLayout(listStudents.size(),6));
+
+        for(Student student : listStudents) {
+            panelListeStudent.add(new JLabel(student.getLastName(), SwingConstants.CENTER));
+            panelListeStudent.add(new JLabel(student.getFirstName(), SwingConstants.CENTER));
+            panelListeStudent.add(new JLabel(student.getGroupPromotion(cnx).getName(), SwingConstants.CENTER));
+            panelListeStudent.add(new JLabel(student.getPromotion(cnx).getName(), SwingConstants.CENTER));
+            panelListeStudent.add(new JLabel("20", SwingConstants.CENTER));
+            panelListeStudent.add(new JLabel("0", SwingConstants.CENTER));
         }
+
         return panelListeStudent;
     }
 
@@ -327,7 +341,7 @@ public class ViewRespSco extends JFrame {
 
     private JPanel panelAfficherT(){
         panelAfficherTeacher = new JPanel();
-        panelAfficherTeacher.setLayout(new BorderLayout());//////Probleme ici
+        panelAfficherTeacher.setLayout(new BorderLayout()); //////Probleme ici
         panelAfficherTeacher.add(panelinfoTeacher(),BorderLayout.NORTH);
 
         JScrollPane jScrollPaneS = new JScrollPane(panelListeT());
@@ -346,13 +360,14 @@ public class ViewRespSco extends JFrame {
 
         return panelinfoTeacher;
     }
+
     private JPanel panelinfoTrecherche(){
         panelinfoTrecherche = new JPanel();
         JTextField jtextRechNom = new JTextField("Nom" );
         jtextRechNom.setPreferredSize(new Dimension(120,30));
         JTextField jtextRechMat = new JTextField("Matiere" );
         jtextRechMat.setPreferredSize(new Dimension(120,30));
-        JButton jButtonRecherche = new JButton("Search");
+        JButton jButtonRecherche = new JButton("Rechercher");
 
         panelinfoTrecherche.add(jtextRechNom);//---------------------Ajouter listner
         panelinfoTrecherche.add(jtextRechMat);//---------------------Ajouter listner
@@ -360,6 +375,7 @@ public class ViewRespSco extends JFrame {
 
         return panelinfoTrecherche;
     }
+
     private JPanel panelinfoT(){
 
         panelinfoT = new JPanel( new GridLayout(1,6));
@@ -376,14 +392,17 @@ public class ViewRespSco extends JFrame {
 
     }
 
-    private JPanel panelListeT(){
-        panelListeTeacher = new JPanel(new GridLayout(25,1));//remplacer 15 par n prof
-        //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
-        for (int i = 1; i <= 25; i++) {
-            panelListeTeacher.add(new JLabel("Amira", SwingConstants.CENTER));
-            panelListeTeacher.add(new JLabel("dedecker", SwingConstants.CENTER));
-            panelListeTeacher.add(new JLabel("physique", SwingConstants.CENTER));
-            panelListeTeacher.add(new JLabel("200h", SwingConstants.CENTER));
+    private JPanel panelListeT(){  //version provisoire avec User, sera remplacé par Teacher ensuite
+        DAO<Teacher> teacherDAO = new TeacherDAO(cnx);
+        List<Teacher> listTeachers = teacherDAO.getAll();
+
+        panelListeTeacher = new JPanel(new GridLayout(listTeachers.size(),1));
+
+        for (Teacher teacher : listTeachers) {
+            panelListeTeacher.add(new JLabel(teacher.getLastName(), SwingConstants.CENTER));
+            panelListeTeacher.add(new JLabel(teacher.getFirstName(), SwingConstants.CENTER));
+            panelListeTeacher.add(new JLabel(teacher.displayCourses(), SwingConstants.CENTER));
+            panelListeTeacher.add(new JLabel(String.valueOf(teacher.getNbHours()), SwingConstants.CENTER));
         }
 
         return panelListeTeacher;
@@ -412,6 +431,7 @@ public class ViewRespSco extends JFrame {
         return panelinfoRoom;
 
     }
+
     private JPanel panelinfoRrecherche(){
         panelinfoRrecherche = new JPanel();
         JTextField jtextRechRoom = new JTextField("Number" );
@@ -423,6 +443,7 @@ public class ViewRespSco extends JFrame {
 
         return panelinfoRrecherche;
     }
+
     private JPanel panelinfoR(){
 
         panelinfoR= new JPanel( new GridLayout(1,6));
@@ -482,10 +503,13 @@ public class ViewRespSco extends JFrame {
     }
 
     private JPanel panelListePromo(){
-        panelListePromo = new JPanel(new GridLayout(5,1));//remplacer 15 par n etudiants
-        //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
-        for (int i = 1; i <= 5; i++) {
-            panelListePromo.add(new JButton("ING3 2023 83 "));//Ajouter fonction string avec tt les infos de l'etudiant
+        DAO<Promotion> promotionDAO = new PromotionDAO(cnx);
+        List<Promotion> listPromotions = promotionDAO.getAll();
+
+        panelListePromo = new JPanel(new GridLayout(5,1));
+
+        for (Promotion p : listPromotions) {
+            panelListePromo.add(new JButton(p.getName()));//Ajouter fonction string avec tt les infos de l'etudiant
         }
 
         return panelListePromo;
@@ -497,11 +521,9 @@ public class ViewRespSco extends JFrame {
         create_frameAddTeacher();
     }
 
-
     public void ListnerAddCours(ActionEvent event) {
         create_frameAddCours();
     }
-
 
     public void ListnerAddStudent(ActionEvent event) {
         create_frameAddStudent();
@@ -541,7 +563,7 @@ public class ViewRespSco extends JFrame {
         jPanel.add(jcmHeureFin);
 
         JPanel jpanel2 = new JPanel();
-        JButton jButonEnregistre = new JButton("ENREGISTRE");
+        JButton jButonEnregistre = new JButton("ENREGISTRER");
         jButonEnregistre.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
@@ -551,7 +573,7 @@ public class ViewRespSco extends JFrame {
                 System.out.print(jcmbMatiereCours.getSelectedItem());
                 System.out.print(jcmHeureDebut.getSelectedItem());
                 System.out.print(jcmHeureFin.getSelectedItem());
-                JOptionPane.showMessageDialog(jPanel,"Choice register");
+                JOptionPane.showMessageDialog(jPanel,"Session créée");
 
             }
         });
@@ -669,17 +691,17 @@ public class ViewRespSco extends JFrame {
         jpanelAddStudent.add(jcmbStudentGroup);
         jpanelAddStudent.add(jButtonAddStudent);
 
-        JFrame jframeAddEleve = new JFrame();
-        jframeAddEleve.setSize(400,300);
-        jframeAddEleve.setTitle("Ajout d'un élève");
-        jframeAddEleve.setLocationRelativeTo(null);
-        jframeAddEleve.setResizable(false);
-        jframeAddEleve.setVisible(true);
-        jframeAddEleve.setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        jframeAddEleve.getContentPane().add(jpanelAddStudent, BorderLayout.CENTER);
-        jframeAddEleve.setVisible(true);
+        JFrame jframeAddStudent = new JFrame();
+        jframeAddStudent.setSize(400,300);
+        jframeAddStudent.setTitle("Ajout d'un élève");
+        jframeAddStudent.setLocationRelativeTo(null);
+        jframeAddStudent.setResizable(false);
+        jframeAddStudent.setVisible(true);
+        jframeAddStudent.setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+        jframeAddStudent.getContentPane().add(jpanelAddStudent, BorderLayout.CENTER);
+        jframeAddStudent.setVisible(true);
 
-        return jframeAddEleve;
+        return jframeAddStudent;
     }
 
 
@@ -687,7 +709,7 @@ public class ViewRespSco extends JFrame {
         Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
         Connection cnx = db.connectDB();
         UIManager.setLookAndFeel( new NimbusLookAndFeel() );
-        ViewRespSco frame = new ViewRespSco(db, cnx);
+        ViewRespSco frame = new ViewRespSco(db, cnx, 40);
         frame.setVisible(true);
     }
 }

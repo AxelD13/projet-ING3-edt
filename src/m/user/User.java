@@ -75,5 +75,7 @@ public class User {
     public void setPermission(EnumPermission permission) {
         this.permission = permission;
     }
+
+    public String toString() { return id + " " + permission + " " + lastName + " " + firstName; }
 }
 

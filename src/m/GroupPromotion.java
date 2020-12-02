@@ -1,24 +1,23 @@
 package m;
 
 public class GroupPromotion {
-    private int id;
-    private String name;
-    private Promotion id_promotion;
 
-    public GroupPromotion(int id, String name, Promotion id_promotion) {
-        this.id = id;
-        this.name = name;
-        this.id_promotion = id_promotion;
-    }
+    private int id;
+
+    private String name;
+
+    private int idPromotion;
 
     public GroupPromotion(){}
 
-    public int getId() {
-        return id;
+    public GroupPromotion(int id, String name, int idPromotion) {
+        this.id = id;
+        this.name = name;
+        this.idPromotion = idPromotion;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -29,11 +28,14 @@ public class GroupPromotion {
         this.name = name;
     }
 
-    public Promotion getId_promotion() {
-        return id_promotion;
+    public int getIdPromotion() {
+        return idPromotion;
     }
 
-    public void setId_promotion(Promotion id_promotion) {
-        this.id_promotion = id_promotion;
+    public void setIdPromotion(int idPromotion) {
+        this.idPromotion = idPromotion;
     }
+
+    public String toString() { return idPromotion + " " + name; }
+
 }

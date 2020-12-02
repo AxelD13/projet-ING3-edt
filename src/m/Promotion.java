@@ -6,23 +6,21 @@ import java.util.Set;
 public class Promotion {
 
     private int id;
+
     private String name;
-    private Set<GroupPromotion> listGroups;
+
+    private Set<GroupPromotion> hashSetGroups;
+
+    public Promotion(){}
 
     public Promotion(int id, String name) {
         this.id = id;
         this.name = name;
-        this.listGroups = new HashSet<>();
+        this.hashSetGroups = new HashSet<>();
     }
-
-    public Promotion(){}
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -33,8 +31,12 @@ public class Promotion {
         this.name = name;
     }
 
-    public void addGroup(GroupPromotion g) { listGroups.add(g); }
+    public Set<GroupPromotion> getHashSetGroups() {
+        return hashSetGroups;
+    }
 
-    public void removeGroup(GroupPromotion g) { listGroups.remove(g); }
+    public void addGroup(GroupPromotion g) { hashSetGroups.add(g); }
+
+    public void removeGroup(GroupPromotion g) { hashSetGroups.remove(g); }
 
 }

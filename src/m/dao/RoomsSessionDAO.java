@@ -1,51 +1,58 @@
 package m.dao;
 
 import c.Database;
-import m.TeacherSession;
+import m.GroupsSession;
+import m.RoomsSession;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
-public class TeacherSessionDAO extends DAO<TeacherSession>{
+public class RoomsSessionDAO extends DAO<RoomsSession> {
+
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
     Connection cnx = db.connectDB();
 
-    public TeacherSessionDAO(Connection conn) {
+    public RoomsSessionDAO(Connection conn) {
         super(conn);
     }
 
-    public boolean create(TeacherSession obj) {
+    public boolean create(RoomsSession obj) {
         return false;
     }
 
-    public boolean delete(TeacherSession obj) {
+    public boolean delete(RoomsSession obj) {
         return false;
     }
 
-    public boolean update(TeacherSession obj) {
+    public boolean update(RoomsSession obj) {
         return false;
     }
 
-    public TeacherSession find(int id) {
-        TeacherSession teacherSession = new TeacherSession();
+
+    public RoomsSession find(int id) {
+        RoomsSession RoomsSession = new RoomsSession();
         SessionDAO sessionDAO = new SessionDAO(cnx);
-        TeacherDAO teacherDAO = new TeacherDAO(cnx);
+        RoomDAO roomDAO = new RoomDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
-            ).executeQuery("SELECT * FROM teachers_session WHERE ID_SESSION = " + id);
+            ).executeQuery("SELECT * FROM rooms_session WHERE ID_SESSION = " + id);
             if (result.first())
-                teacherSession = new TeacherSession(
+                RoomsSession = new RoomsSession(
                         sessionDAO.find(result.getInt("ID_SESSION")),
-                        teacherDAO.find(result.getInt("ID_TEACHER")));
+                        roomDAO.find(result.getInt("ID_ROOM")));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return teacherSession;
+        return RoomsSession;
     }
+
+    public List<RoomsSession> getAll() { return null; }
+
 }

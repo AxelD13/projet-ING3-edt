@@ -6,8 +6,10 @@ import m.GroupsSession;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class GroupsSessionDAO extends DAO<GroupsSession> {
+
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
     Connection cnx = db.connectDB();
 
@@ -27,8 +29,7 @@ public class GroupsSessionDAO extends DAO<GroupsSession> {
         return false;
     }
 
-    public GroupsSession
-    find(int id) {
+    public GroupsSession find(int id) {
         GroupsSession groupsSession = new GroupsSession();
         SessionDAO sessionDAO = new SessionDAO(cnx);
         GroupPromotionDAO groupPromotionDAO = new GroupPromotionDAO(cnx);
@@ -49,4 +50,7 @@ public class GroupsSessionDAO extends DAO<GroupsSession> {
 
         return groupsSession;
     }
+
+    public List<GroupsSession> getAll() { return null; }
+
 }

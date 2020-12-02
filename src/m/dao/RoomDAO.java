@@ -1,11 +1,15 @@
 package m.dao;
 
 import c.Database;
+import m.Course;
+import m.GroupPromotion;
 import m.Room;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomDAO extends DAO<Room> {
     Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
@@ -29,24 +33,52 @@ public class RoomDAO extends DAO<Room> {
 
     public Room find(int id) {
         Room room = new Room();
-        SiteDAO siteDAO = new SiteDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             ).executeQuery("SELECT * FROM room WHERE ID = " + id);
-            if (result.first())
-                room = new Room(id, result.getString("NAME"),
-                        result.getInt("CAPACITY"),
-                        siteDAO.find(result.getInt("ID_SITE")));
 
+            if(result.first()) {
+                room = new Room(id, result.getString("NAME"),
+                        result.getInt("CAPACITY"), result.getInt("ID_SITE"));
+            }
+
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return room;
     }
+
+    public List<Room> getAll() {
+        List<Room> listRooms = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM room");
+
+            boolean next = result.next();
+
+            while (next) {
+                listRooms.add(new Room(result.getInt("ID"), result.getString("NAME"),
+                        result.getInt("CAPACITY"), result.getInt("ID_SITE")));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listRooms;
+    }
+
 }
 
 

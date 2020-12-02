@@ -1,11 +1,17 @@
 package c;
 
+import m.dao.DAO;
+import m.dao.UserDAO;
+import m.user.User;
+
 import java.sql.*;
 import java.util.Scanner;
 
 public class Database {
 
-    private String url, user, password;
+    private String url;
+    private String user;
+    private String password;
 
     public Database(String url, String user, String password) {
         this.url = url;
@@ -58,7 +64,7 @@ public class Database {
         }
     }
 
-    public String identification(Connection cnx, String emailIn, String passwordIn) { //permet de s'identifier pr accéder à l'edt
+    public User identification(Connection cnx, String emailIn, String passwordIn) { //permet de s'identifier pr accéder à l'edt
         int id = 0;
         boolean emailOK = false;
 
@@ -84,7 +90,7 @@ public class Database {
             }
 
             if(!emailOK) {
-                return "Email introuvable.";
+                return null;
             }
 
         } catch (SQLException e) {
@@ -99,13 +105,17 @@ public class Database {
 
             if(results.next()) {
                 if (!passwordIn.equals(results.getString("PASSWORD"))) {
-                    return "Mot de passe incorrect.";
+                    return null;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return "OK"; //si email + mdp valides, on retourne OK
+        DAO<User> userDAO = new UserDAO(cnx);
+        User edtUser = userDAO.find(id);
+
+        return edtUser;  //si email + mdp valides, on retourne l'utilisateur
     }
+
 }

@@ -1,24 +1,26 @@
 package m;
 
 public class Room {
-    private int id;
-    private String name;
-    private int capacity;
-    private Site id_site;
 
-    public Room(int id, String name, int capacity, Site idSite) {
+    private int id;
+
+    private String name;
+
+    private int capacity;
+
+    private int idSite;
+
+    public Room() {}
+
+    public Room(int id, String name, int capacity, int idSite) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
-        this.id_site = idSite;
-    }
-public Room(){}
-    public int getId() {
-        return id;
+        this.idSite = idSite;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -37,11 +39,11 @@ public Room(){}
         this.capacity = capacity;
     }
 
-    public Site getId_site() {
-        return id_site;
+    public int getIdSite() {
+        return idSite;
     }
 
-    public void setId_site(Site id_site) {
-        this.id_site = id_site;
+    public void setIdSite(int idSite) {
+        this.idSite = idSite;
     }
 }

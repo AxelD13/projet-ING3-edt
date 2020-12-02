@@ -1,10 +1,13 @@
 package v;
 
+import c.Database;
+
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class ViewDirector extends JFrame {
 
@@ -24,7 +27,7 @@ public class ViewDirector extends JFrame {
 
 
     /* Construction de l'interface graphique */
-    public ViewDirector() {
+    public ViewDirector(Database db, Connection cnx, int IdUser) {
         super("Mon emploi du temps");
         this.setSize(1200, 800);//Largeur; Hauter
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,11 +66,11 @@ public class ViewDirector extends JFrame {
         menuBar.setPreferredSize(new Dimension(0, 50));
 
         // Définition du menu déroulant "Display" et de son contenu
-        JMenu mnuDisplay = new JMenu("Dispaly");
+        JMenu mnuDisplay = new JMenu("Afficher");
         //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
 
 
-        JMenuItem mnuStudent = new JMenuItem("Student list");
+        JMenuItem mnuStudent = new JMenuItem("Liste étudiants");
         mnuStudent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[1]);
@@ -75,7 +78,7 @@ public class ViewDirector extends JFrame {
         });
         mnuDisplay.add(mnuStudent);
 
-        JMenuItem mnuTeach = new JMenuItem("Teacher list");
+        JMenuItem mnuTeach = new JMenuItem("Liste professeurs");
         mnuTeach.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[2]);
@@ -83,7 +86,7 @@ public class ViewDirector extends JFrame {
         });
         mnuDisplay.add(mnuTeach);
 
-        JMenuItem mnuPromos = new JMenuItem("Promos list");
+        JMenuItem mnuPromos = new JMenuItem("Liste promos");
         mnuPromos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[4]);
@@ -93,7 +96,7 @@ public class ViewDirector extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnufreerooms = new JMenuItem("Free rooms");
+        JMenuItem mnufreerooms = new JMenuItem("Salles libres");
         mnufreerooms.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[3]);
@@ -103,7 +106,7 @@ public class ViewDirector extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuExit = new JMenuItem("Exit");
+        JMenuItem mnuExit = new JMenuItem("Sortie");
         mnuExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayoutPromo.show(panelAfficherPromo, listPromo[0]);
@@ -115,7 +118,7 @@ public class ViewDirector extends JFrame {
         menuBar.add(mnuDisplay);
 
         // Définition du menu déroulant "Ajouter" et de son contenu
-        JMenu mnuEdit = new JMenu("Add");
+        JMenu mnuEdit = new JMenu("Ajouter");
 
         JMenuItem mnuAddTeacher = new JMenuItem("Teacher");
         mnuAddTeacher.addActionListener(this::ListnerAddTeacher);
@@ -846,8 +849,10 @@ public class ViewDirector extends JFrame {
 
 
     public static void main(String[] args) throws Exception {
-        UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        ViewDirector frame = new ViewDirector();
+        Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+        Connection cnx = db.connectDB();
+        UIManager.setLookAndFeel( new NimbusLookAndFeel() );
+        ViewDirector frame = new ViewDirector(db, cnx, 39);
         frame.setVisible(true);
     }
 }

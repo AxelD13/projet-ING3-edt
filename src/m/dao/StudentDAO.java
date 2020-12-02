@@ -1,15 +1,17 @@
 package m.dao;
+
 import c.Database;
+
+import m.GroupPromotion;
 import m.Student;
+import m.user.EnumPermission;
+import m.user.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class StudentDAO extends DAO<Student> {
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
-    Connection cnx = db.connectDB();
-
+public class StudentDAO extends DAO<Student>{
 
     public StudentDAO(Connection conn) {
         super(conn);
@@ -34,25 +36,86 @@ public class StudentDAO extends DAO<Student> {
             ResultSet result = this.connect.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
-            ).executeQuery("SELECT * FROM student WHERE ID_USER = " + id);
+            ).executeQuery("SELECT * FROM user INNER JOIN student s on user.ID = s.ID_USER WHERE ID = " + id);
 
-            UserDAO userDAO = new UserDAO(cnx);
-            GroupPromotionDAO group_promotionDAO = new GroupPromotionDAO(cnx);
-            if(result.first())
-
-                student = new Student(
-
-
-                        userDAO.find(result.getInt("ID_USER")),
+            if (result.first()) {
+                student = new Student(id, result.getString("EMAIL"),
+                        result.getString("PASSWORD"),
+                        result.getString("LAST_NAME"),
+                        result.getString("FIRST_NAME"),
                         result.getInt("NUMBER"),
-                        group_promotionDAO.find(result.getInt("ID_GROUP_PROMOTION"))
-                );
+                        result.getInt("ID_GROUP_PROMOTION"));
+            }
 
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return student;
     }
+
+    public List<Student> getAll() {
+        List<Student> listStudents = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM user RIGHT JOIN student s on user.ID = s.ID_USER");
+
+            boolean next = result.next();
+
+            while (next) {
+                listStudents.add(new Student(result.getInt("ID"), result.getString("EMAIL"),
+                        result.getString("PASSWORD"),
+                        result.getString("LAST_NAME"),
+                        result.getString("FIRST_NAME"),
+                        result.getInt("NUMBER"),
+                        result.getInt("ID_GROUP_PROMOTION")));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listStudents;
+    }
+
+    public List<Student> getAll(int idGroupPromotion) {  //retourne une liste de tous les élèves d'un groupe
+        List<Student> listStudents = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM user RIGHT JOIN student s on user.ID = s.ID_USER " +
+                    "WHERE ID_GROUP_PROMOTION = " + idGroupPromotion);
+
+            boolean next = result.next();
+
+            while (next) {
+                listStudents.add(new Student(result.getInt("ID"), result.getString("EMAIL"),
+                        result.getString("PASSWORD"),
+                        result.getString("LAST_NAME"),
+                        result.getString("FIRST_NAME"),
+                        result.getInt("NUMBER"),
+                        result.getInt("ID_GROUP_PROMOTION")));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listStudents;
+    }
+
 }
 
 
