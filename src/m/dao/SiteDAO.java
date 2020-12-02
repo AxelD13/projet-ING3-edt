@@ -16,11 +16,23 @@ public class SiteDAO extends DAO<Site> {
     }
 
     public boolean create(Site obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO site(NAME)" +
+                    "values('" + obj.getName() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Site obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM site WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     public boolean update(Site obj) {

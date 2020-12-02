@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomDAO extends DAO<Room> {
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
     Connection cnx = db.connectDB();
 
     public RoomDAO(Connection conn) {
@@ -20,11 +20,22 @@ public class RoomDAO extends DAO<Room> {
     }
 
     public boolean create(Room obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO room(NAME, CAPACITY, ID_SITE)" +
+                    "values('" + obj.getName() + "', '" + obj.getCapacity() + "', '" + obj.getIdSite() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Room obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM room WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(Room obj) {
@@ -40,7 +51,7 @@ public class RoomDAO extends DAO<Room> {
                     ResultSet.CONCUR_READ_ONLY
             ).executeQuery("SELECT * FROM room WHERE ID = " + id);
 
-            if(result.first()) {
+            if (result.first()) {
                 room = new Room(id, result.getString("NAME"),
                         result.getInt("CAPACITY"), result.getInt("ID_SITE"));
             }

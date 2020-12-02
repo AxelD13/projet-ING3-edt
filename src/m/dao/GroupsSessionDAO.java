@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GroupsSessionDAO extends DAO<GroupsSession> {
 
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
     Connection cnx = db.connectDB();
 
     public GroupsSessionDAO(Connection conn) {
@@ -18,11 +18,22 @@ public class GroupsSessionDAO extends DAO<GroupsSession> {
     }
 
     public boolean create(GroupsSession obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO groups_session(ID_SESSION, ID_GROUP)" +
+                    "values('" + obj.getSession() + "', '" + obj.getGroupPromotion() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(GroupsSession obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM groups_session WHERE ID =" + obj.getSession());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(GroupsSession obj) {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TeachersSessionDAO extends DAO<TeachersSession>{
 
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
     Connection cnx = db.connectDB();
 
     public TeachersSessionDAO(Connection conn) {
@@ -18,11 +18,22 @@ public class TeachersSessionDAO extends DAO<TeachersSession>{
     }
 
     public boolean create(TeachersSession obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO teachers_session(ID_SESSION, ID_TEACHER)" +
+                    "values('" + obj.getSession() + "', '" + obj.getTeacher() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(TeachersSession obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM teachers_session WHERE ID =" + obj.getSession());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(TeachersSession obj) {

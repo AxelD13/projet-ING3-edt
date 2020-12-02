@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RoomsSessionDAO extends DAO<RoomsSession> {
 
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
     Connection cnx = db.connectDB();
 
     public RoomsSessionDAO(Connection conn) {
@@ -19,11 +19,22 @@ public class RoomsSessionDAO extends DAO<RoomsSession> {
     }
 
     public boolean create(RoomsSession obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO room_session(ID_SESSION, ID_ROOM)" +
+                    "values('" + obj.getSession() + "', '" + obj.getRoom() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(RoomsSession obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM rooms_session WHERE ID =" + obj.getSession());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(RoomsSession obj) {

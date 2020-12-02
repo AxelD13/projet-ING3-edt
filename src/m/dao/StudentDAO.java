@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO extends DAO<Student>{
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
+    Connection cnx = db.connectDB();
+
 
     public StudentDAO(Connection conn) {
         super(conn);

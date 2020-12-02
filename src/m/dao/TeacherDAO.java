@@ -14,17 +14,32 @@ import java.util.List;
 import java.util.Set;
 
 public class TeacherDAO extends DAO<Teacher> {
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
+    Connection cnx = db.connectDB();
+
 
     public TeacherDAO(Connection conn) {
         super(conn);
     }
 
     public boolean create(Teacher obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO teacher(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME)" +
+                    "values('" + obj.getId() + "', '" + obj.getEmail() + "', '" + obj.getPassword() + "', '" + obj.getLastName() + "', '"
+                    + obj.getFirstName() + "', '" + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Teacher obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM teacher WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(Teacher obj) {

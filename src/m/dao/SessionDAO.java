@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SessionDAO extends DAO<Session> {
-    Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
     Connection cnx = db.connectDB();
 
     public SessionDAO(Connection conn) {
@@ -24,11 +24,24 @@ public class SessionDAO extends DAO<Session> {
     }
 
     public boolean create(Session obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("INSERT INTO session(WEEK, DATE, START_TIME, END_TIME, STATE, ID_COURSE, ID_TYPE)" +
+                    "values('" + obj.getWeek() + "', '" + obj.getDate() + "', '" + obj.getStartTime() + "', '"
+                    + obj.getEndTime() + "', '" + obj.getState() + "', '" + obj.getIdCourse() + "', '" + obj.getIdType()
+                    + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean delete(Session obj) {
-        return false;
+        try {
+            this.connect.createStatement().executeUpdate("DELETE FROM session WHERE ID =" + obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean update(Session obj) {
@@ -53,8 +66,8 @@ public class SessionDAO extends DAO<Session> {
                         result.getTime("START_TIME"),
                         result.getTime("END_TIME"),
                         EnumState.valueOf(result.getString("STATE").toUpperCase()),
-                        courseDAO.find(result.getInt("ID_COURSE")),
-                        typeCourseDAO.find(result.getInt("ID_TYPE")));
+                        result.getInt("ID_COURSE"),
+                        result.getInt("ID_TYPE"));
             }
 
             result.close();
@@ -85,8 +98,8 @@ public class SessionDAO extends DAO<Session> {
                         result.getTime("START_TIME"),
                         result.getTime("END_TIME"),
                         EnumState.valueOf(result.getString("STATE").toUpperCase()),
-                        courseDAO.find(result.getInt("ID_COURSE")),
-                        typeCourseDAO.find(result.getInt("ID_TYPE"))));
+                        result.getInt("ID_COURSE"),
+                        result.getInt("ID_TYPE")));
 
                 next = result.next();
             }

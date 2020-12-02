@@ -14,10 +14,12 @@ public class Session {
     private Time startTime;
     private Time endTime;
     private EnumState state;
-    private Course idCourse;
-    private TypeCourse idType;
+    private int idCourse;
+    private int idType;
 
-    public Session(int id, int week, Date date, Time start_Time, Time end_Time, EnumState state, Course idCourse, TypeCourse idType) {
+    public Session(){}
+
+    public Session(int id, int week, Date date, Time start_Time, Time end_Time, EnumState state, int idCourse, int idType) {
         this.id = id;
         this.week = week;
         this.date = date;
@@ -28,7 +30,7 @@ public class Session {
         this.idType = idType;
     }
 
-    public Session(){}
+    public Session(int i, java.sql.Date date, Time time, Time time1, EnumState processing, int i1, int i2){}
 
     public int getId() {
         return id;
@@ -74,19 +76,17 @@ public class Session {
         this.state = state;
     }
 
-    public Course getIdCourse() {
-        return idCourse;
-    }
+    public int getIdCourse() { return idCourse; }
 
-    public void setIdCourse(Course idCourse) {
+    public void setIdCourse(int idCourse) {
         this.idCourse = idCourse;
     }
 
-    public TypeCourse getIdType() {
+    public int getIdType() {
         return idType;
     }
 
-    public void setIdType(TypeCourse idType) {
+    public void setIdType(int idType) {
         this.idType = idType;
     }
 }
