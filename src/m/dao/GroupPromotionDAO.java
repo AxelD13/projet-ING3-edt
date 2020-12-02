@@ -31,7 +31,8 @@ public class GroupPromotionDAO extends DAO<GroupPromotion>{
 
     public boolean delete(GroupPromotion obj) {
         try {
-            this.connect.createStatement().executeUpdate("DELETE FROM group_promotion WHERE ID =" + obj.getId());
+            this.connect.createStatement().executeUpdate(
+                    "DELETE FROM group_promotion WHERE ID =" + obj.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -52,7 +53,8 @@ public class GroupPromotionDAO extends DAO<GroupPromotion>{
             ).executeQuery("SELECT * FROM group_promotion WHERE ID = " + id);
 
             if(result.first()) {
-                groupPromotion = new GroupPromotion(id, result.getString("NAME"),
+                groupPromotion = new GroupPromotion(id,
+                        result.getString("NAME"),
                         result.getInt("ID_PROMOTION"));
             }
 

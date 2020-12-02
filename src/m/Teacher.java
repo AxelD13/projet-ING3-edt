@@ -13,6 +13,11 @@ public class Teacher extends User {
 
     public Teacher() {}
 
+    public Teacher(String email, String password, String lastName, String firstName, Set<Course> hashSetCourses) {
+        super(email, password, lastName, firstName, EnumPermission.TEACHER);
+        this.hashSetCourses.addAll(hashSetCourses);
+    }
+
     public Teacher(int idUser, String email, String password, String lastName, String firstName, Set<Course> hashSetCourses) {
         super(idUser, email, password, lastName, firstName, EnumPermission.TEACHER);
         this.hashSetCourses.addAll(hashSetCourses);

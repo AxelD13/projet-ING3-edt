@@ -2,40 +2,33 @@ package m;
 
 import m.session.EnumState;
 import m.session.Session;
-import m.typecourse.TypeCourse;
 
+import java.sql.Date;
 import java.sql.Time;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-public class TeachersSession {
+public class TeachersSession extends Session {
 
-    private Session session;
-
-    private Teacher teacher;
+    private int idTeacher;
 
     public TeachersSession() {}
 
-    public TeachersSession(Session session, Teacher teacher) {
-        this.session = session;
-        this.teacher = teacher;
+    public TeachersSession(int week, Date date, Time startTime,
+                           Time endTime, EnumState state, int idCourse, int idType, int idTeacher) {
+        super(week, date, startTime, endTime, state, idCourse, idType);
+        this.idTeacher = idTeacher;
+    }
+    public TeachersSession(int idSession, int week, Date date, Time startTime,
+                           Time endTime, EnumState state, int idCourse, int idType, int idTeacher) {
+        super(idSession, week, date, startTime, endTime, state, idCourse, idType);
+        this.idTeacher = idTeacher;
     }
 
-    public Session getSession() {
-        return session;
+    public int getIdTeacher() {
+        return idTeacher;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setIdTeacher(int idTeacher) {
+        this.idTeacher = idTeacher;
     }
 
 }

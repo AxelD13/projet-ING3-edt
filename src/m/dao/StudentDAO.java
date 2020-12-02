@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO extends DAO<Student>{
-    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
-    Connection cnx = db.connectDB();
-
 
     public StudentDAO(Connection conn) {
         super(conn);
@@ -22,8 +19,12 @@ public class StudentDAO extends DAO<Student>{
 
     public boolean create(Student obj) {
         try {
+            this.connect.createStatement().executeUpdate("INSERT INTO user(EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, PERMISSION)" +
+                    "VALUES('" + obj.getEmail() + "', '" + obj.getPassword() + "', '" + obj.getLastName() + "', '"
+                    + obj.getFirstName() + "', '" + EnumPermission.STUDENT.getValue() + "')");
+
             this.connect.createStatement().executeUpdate("INSERT INTO student(ID_USER, NUMBER, ID_GROUP_PROMOTION)" +
-                    "values('" + obj.getId() + "', '" + obj.getNumber() + "', '" + obj.getIdGroupPromotion()+ "')");
+                    "VALUES(LAST_INSERT_ID(), " + obj.getNumber() + ", " + obj.getIdGroupPromotion() + ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }

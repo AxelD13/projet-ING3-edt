@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 public class TeacherDAO extends DAO<Teacher> {
-    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
-    Connection cnx = db.connectDB();
-
 
     public TeacherDAO(Connection conn) {
         super(conn);
@@ -24,9 +21,12 @@ public class TeacherDAO extends DAO<Teacher> {
 
     public boolean create(Teacher obj) {
         try {
-            this.connect.createStatement().executeUpdate("INSERT INTO teacher(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME)" +
-                    "values('" + obj.getId() + "', '" + obj.getEmail() + "', '" + obj.getPassword() + "', '" + obj.getLastName() + "', '"
-                    + obj.getFirstName() + "', '" + "')");
+            this.connect.createStatement().executeUpdate("INSERT INTO user(EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, PERMISSION)" +
+                    "VALUES('" + obj.getEmail() + "', '" + obj.getPassword() + "', '" + obj.getLastName() + "', '"
+                    + obj.getFirstName() + "', '" + EnumPermission.TEACHER.getValue() + "')");
+
+            this.connect.createStatement().executeUpdate("INSERT INTO teacher(ID_USER, ID_COURSE) " +
+                        "VALUES(LAST_INSERT_ID(), " + obj.getHashSetCourses().iterator().next().getId() + ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class TeacherDAO extends DAO<Teacher> {
 
     public boolean delete(Teacher obj) {
         try {
-            this.connect.createStatement().executeUpdate("DELETE FROM teacher WHERE ID =" + obj.getId());
+            this.connect.createStatement().executeUpdate("DELETE FROM teacher WHERE ID_USER =" + obj.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

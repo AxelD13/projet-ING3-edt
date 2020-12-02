@@ -15,6 +15,12 @@ public class Student extends User {
 
     public Student(){}
 
+    public Student(String email, String password, String lastName, String firstName, int number, int idGroupPromotion) {
+        super(email, password, lastName, firstName, EnumPermission.STUDENT);
+        this.number = number;
+        this.idGroupPromotion = idGroupPromotion;
+    }
+
     public Student(int idUser, String email, String password, String lastName, String firstName, int number, int idGroupPromotion) {
         super(idUser, email, password, lastName, firstName, EnumPermission.STUDENT);
         this.number = number;

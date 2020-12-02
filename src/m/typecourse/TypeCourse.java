@@ -4,13 +4,12 @@ public class TypeCourse {
     private int id;
     private EnumName name;
 
+    public TypeCourse(){}
+
     public TypeCourse(int id, EnumName name) {
         this.id = id;
         this.name = name;
     }
-
-    public TypeCourse(){}
-
 
     public int getId() {
         return id;

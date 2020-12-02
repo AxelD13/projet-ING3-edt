@@ -2,11 +2,16 @@ package m.dao;
 
 import c.Database;
 import m.*;
+import m.session.EnumState;
 import m.session.Session;
 import m.typecourse.TypeCourse;
 import m.user.User;
 import java.sql.Connection;
+import java.sql.Time;
+import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class TestDAO {
@@ -14,6 +19,15 @@ public class TestDAO {
     public static void main(String[] args) {
         Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
         Connection cnx = db.connectDB();
+
+        /*
+        DAO<Session> sessionDAO = new SessionDAO(cnx);
+
+        Session testSession = new Session(12, new Date(1607554800L * 1000),
+                new Time(8, 0, 0), new Time(9, 30, 0),
+                EnumState.PROCESSING, 1, 1);
+
+        sessionDAO.create(testSession);
 
         DAO<User> userDao = new UserDAO(cnx);
         List<User> listUsers = userDao.getAll();
@@ -64,6 +78,8 @@ public class TestDAO {
         System.out.println();
         System.out.println("///////////////////////");
         System.out.println();
+
+         */
     }
 
 }

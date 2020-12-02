@@ -3,40 +3,34 @@ package m;
 
 import m.session.EnumState;
 import m.session.Session;
-import m.typecourse.TypeCourse;
 
+import java.sql.Date;
 import java.sql.Time;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-public class RoomsSession {
+public class RoomsSession extends Session{
 
-    private Session session;
-
-    private  Room room;
+    private int idRoom;
 
     public RoomsSession(){}
 
-    public RoomsSession(Session session, Room room) {
-        this.session = session;
-        this.room = room;
+    public RoomsSession(int week, Date date, Time startTime,
+                        Time endTime, EnumState state, int idCourse, int idType, int idRoom) {
+        super(week, date, startTime, endTime, state, idCourse, idType);
+        this.idRoom = idRoom;
     }
 
-    public Session getSession() {
-        return session;
+    public RoomsSession(int idSession, int week, Date date, Time startTime,
+                        Time endTime, EnumState state, int idCourse, int idType, int idRoom) {
+        super(idSession, week, date, startTime, endTime, state, idCourse, idType);
+        this.idRoom = idRoom;
     }
 
-    public void setSession(Session id_Session) {
-        this.session = id_Session;
+    public int getIdRoom() {
+        return idRoom;
     }
 
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setIdRoom(int idRoom) {
+        this.idRoom = idRoom;
     }
 
 }

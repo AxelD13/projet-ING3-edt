@@ -3,6 +3,7 @@ package m.dao;
 import m.Course;
 import m.GroupPromotion;
 import  m.Promotion;
+import m.Student;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -79,6 +80,10 @@ public class PromotionDAO extends DAO<Promotion> {
         }
 
         return listPromotions;
+    }
+
+    public List<Student> getStudents(int idPromotion) {
+        return null;
     }
 
 }

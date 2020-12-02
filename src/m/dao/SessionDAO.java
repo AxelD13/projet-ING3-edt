@@ -16,8 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 public class SessionDAO extends DAO<Session> {
-    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
-    Connection cnx = db.connectDB();
 
     public SessionDAO(Connection conn) {
         super(conn);
@@ -50,8 +48,6 @@ public class SessionDAO extends DAO<Session> {
 
     public Session find(int id) {
         Session session = new Session();
-        CourseDAO courseDAO = new CourseDAO(cnx);
-        TypeCourseDAO typeCourseDAO = new TypeCourseDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(
@@ -80,8 +76,6 @@ public class SessionDAO extends DAO<Session> {
 
     public List<Session> getAll() {
         List<Session> listSessions = new ArrayList<>();
-        CourseDAO courseDAO = new CourseDAO(cnx);
-        TypeCourseDAO typeCourseDAO = new TypeCourseDAO(cnx);
 
         try {
             ResultSet result = this.connect.createStatement(

@@ -10,6 +10,11 @@ public class GroupPromotion {
 
     public GroupPromotion(){}
 
+    public GroupPromotion(String name, int idPromotion) {
+        this.name = name;
+        this.idPromotion = idPromotion;
+    }
+
     public GroupPromotion(int id, String name, int idPromotion) {
         this.id = id;
         this.name = name;

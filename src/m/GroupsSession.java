@@ -1,34 +1,35 @@
 package m;
 
+import m.session.EnumState;
 import m.session.Session;
 
-public class GroupsSession {
+import java.sql.Date;
+import java.sql.Time;
 
-    private Session session;
+public class GroupsSession extends Session {
 
-    private GroupPromotion groupPromotion;
+    private int idGroupPromotion;
 
     public GroupsSession(){}
 
-    public GroupsSession(Session session, GroupPromotion groupPromotion) {
-        this.session = session;
-        this.groupPromotion = groupPromotion;
+    public GroupsSession(int week, Date date, Time startTime,
+                         Time endTime, EnumState state, int idCourse, int idType, int idGroupPromotion) {
+        super(week, date, startTime, endTime, state, idCourse, idType);
+        this.idGroupPromotion = idGroupPromotion;
     }
 
-    public Session getSession() {
-        return session;
+    public GroupsSession(int idSession, int week, Date date, Time startTime,
+                         Time endTime, EnumState state, int idCourse, int idType, int idGroupPromotion) {
+        super(idSession, week, date, startTime, endTime, state, idCourse, idType);
+        this.idGroupPromotion = idGroupPromotion;
     }
 
-    public void setSession(Session id_Session) {
-        this.session = id_Session;
+    public int getIdGroupPromotion() {
+        return idGroupPromotion;
     }
 
-    public GroupPromotion getGroupPromotion() {
-        return groupPromotion;
-    }
-
-    public void setGroupPromotion(GroupPromotion groupPromotion) {
-        this.groupPromotion = groupPromotion;
+    public void setIdGroupPromotion(int idGroupPromotion) {
+        this.idGroupPromotion = idGroupPromotion;
     }
 
 }
