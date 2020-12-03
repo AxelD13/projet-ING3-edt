@@ -1,11 +1,13 @@
 package m.dao;
 
+import m.Course;
 import m.GroupsSession;
 import m.session.EnumState;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsSessionDAO extends DAO<GroupsSession> {
@@ -73,6 +75,38 @@ public class GroupsSessionDAO extends DAO<GroupsSession> {
         return groupsSession;
     }
 
-    public List<GroupsSession> getAll() { return null; }
+    public List<GroupsSession> getAll() {
+        List<GroupsSession> listGroupsSessions = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM session RIGHT JOIN groups_session gs on session.ID = gs.ID_SESSION");
+
+            boolean next = result.next();
+
+            while (next) {
+                listGroupsSessions.add(new GroupsSession(
+                        result.getInt("ID"),
+                        result.getInt("WEEK"),
+                        result.getDate("DATE"),
+                        result.getTime("START_TIME"),
+                        result.getTime("END_TIME"),
+                        EnumState.valueOf(result.getString("STATE").toUpperCase()),
+                        result.getInt("ID_COURSE"),
+                        result.getInt("ID_TYPE"),
+                        result.getInt("ID_GROUP")));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listGroupsSessions;
+    }
 
 }

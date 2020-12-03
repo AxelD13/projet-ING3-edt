@@ -1,12 +1,15 @@
 package m.dao;
 
 import c.Database;
+import m.Course;
+import m.GroupsSession;
 import m.RoomsSession;
 import m.session.EnumState;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoomsSessionDAO extends DAO<RoomsSession> {
@@ -75,6 +78,38 @@ public class RoomsSessionDAO extends DAO<RoomsSession> {
         return RoomsSession;
     }
 
-    public List<RoomsSession> getAll() { return null; }
+    public List<RoomsSession> getAll() {
+        List<RoomsSession> listRoomsSessions = new ArrayList<>();
+
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM session RIGHT JOIN rooms_session rs on session.ID = rs.ID_SESSION");
+
+            boolean next = result.next();
+
+            while (next) {
+                listRoomsSessions.add(new RoomsSession(
+                        result.getInt("ID"),
+                        result.getInt("WEEK"),
+                        result.getDate("DATE"),
+                        result.getTime("START_TIME"),
+                        result.getTime("END_TIME"),
+                        EnumState.valueOf(result.getString("STATE").toUpperCase()),
+                        result.getInt("ID_COURSE"),
+                        result.getInt("ID_TYPE"),
+                        result.getInt("ID_ROOM")));
+
+                next = result.next();
+            }
+
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listRoomsSessions;
+    }
 
 }
