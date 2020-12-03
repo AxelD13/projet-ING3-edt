@@ -1,65 +1,87 @@
 package v;
-
+import m.session.Session;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
+import javax.swing.*;
+import java.text.DecimalFormat;
+import java.util.List;
 
+/** Class for the Pie CHART **/
+public class PieChart extends JFrame {
+    private static final long serialVersionUID = 6294689542092367723L;
+    private List<Session> listsession;
 
-public class PieChart extends ApplicationFrame {
-
-
-    public PieChart(final String title) {
-
+    /** Create constructor **/
+    public PieChart(String title, List<Session> listsession) {
         super(title);
-        final PieDataset dataset = createDataset();
-        final JFreeChart chart = createChart(dataset);
+        this.listsession = listsession;
 
-        final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        setContentPane(chartPanel);
+        /** Create dataset **/
+        PieDataset dataset = createDataset();
 
+        /** Create chart **/
+        JFreeChart chart = ChartFactory.createPieChart(
+                "NUMBER COURSE",
+                dataset,
+                true,
+                true,
+                false);
+
+        /** Format Label **/
+        PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator(
+                " {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+        ((PiePlot) chart.getPlot()).setLabelGenerator(labelGenerator);
+
+        /** Create Panel **/
+        ChartPanel panel = new ChartPanel(chart);
+        setContentPane(panel);
     }
-
-
+    /** use the data of the list session **/
     private PieDataset createDataset() {
+        int CountP = 0;
+        int CountM = 0;
+        int CountI = 0;
+        int CountE = 0;
+        int CountA = 0;
+        int CountLV1 = 0;
+        int CountLV2 = 0;
         final DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("One", new Double(43.2));
-        dataset.setValue("Two", new Double(10.0));
-        dataset.setValue("Three", new Double(27.5));
-        dataset.setValue("Four", new Double(17.5));
-        dataset.setValue("Five", new Double(11.0));
-        dataset.setValue("Six", new Double(19.4));
+        for (Session session : listsession) {
+            if (session.getIdCourse() == 1) {
+                CountE++;
+            }
+            if (session.getIdCourse() == 2) {
+                CountI++;
+            }
+            if (session.getIdCourse() == 4) {
+                CountLV1++;
+            }
+            if (session.getIdCourse() == 4) {
+                CountLV2++;
+            }
+            if (session.getIdCourse() == 5) {
+                CountM++;
+            }
+            if (session.getIdCourse() == 6) {
+                CountP++;
+            }
+            if (session.getIdCourse() == 13) {
+                CountA++;
+            }
+        }
+        dataset.setValue("Elec", new Double(CountE));
+        dataset.setValue("Info", new Double(CountI));
+        dataset.setValue("Physique", new Double(CountP));
+        dataset.setValue("Math", new Double(CountM));
+        dataset.setValue("Analyse Financière", new Double(CountA));
+        dataset.setValue("LV1" , new Double(CountLV1));
+        dataset.setValue("LV2" , new Double(CountLV2));
         return dataset;
     }
-
-
-    private JFreeChart createChart(final PieDataset dataset) {
-        final JFreeChart chart = ChartFactory.createPieChart(
-                "Pie Chart Demo 2",  // chart title
-                dataset,             // dataset
-                true,                // include legend
-                false,
-                false
-        );
-        final PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setNoDataMessage("No data available");
-        plot.setExplodePercent(1, 0.30);
-        return chart;
-    }
-
-
-    public static void main(final String[] args) {
-
-        final PieChart test = new PieChart("Pie Chart");
-        test.pack();
-        RefineryUtilities.centerFrameOnScreen(test);
-        test.setVisible(true);
-
-    }
-
 }

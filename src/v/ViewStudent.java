@@ -1,16 +1,19 @@
 package v;
 
+import m.Room;
+import m.dao.DAO;
+import m.dao.RoomDAO;
+import m.dao.SessionDAO;
+import m.session.Session;
 import org.jfree.ui.RefineryUtilities;
-
 import c.Database;
-
 import javax.swing.*;
-        import java.awt.*;
-
-        import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
+import java.awt.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.List;
 
 
 public class ViewStudent extends JFrame {
@@ -26,7 +29,12 @@ public class ViewStudent extends JFrame {
             panelAfficherTeacher, panelinfoTeacher,panelListeTeacher, panelAfficherRoom, panelinfoRoom,panelListeRoom,  panelAfficherPromo, panelinfoPromo,panelListePromo, panelinfoTrecherche,panelinfoT,panelinfoRrecherche,
             panelinfoR;
 
-
+    Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
+    Connection cnx = db.connectDB();
+    DAO<Room> RoomDAO = new RoomDAO(cnx);
+    List<Room> listRoom = RoomDAO.getAll();
+    DAO<Session> sessionDAO = new SessionDAO(cnx);
+    List<Session> listSessions = sessionDAO.getAll();
     /* Construction de l'interface graphique */
     public ViewStudent(Database db, Connection cnx, int idUser) {
         super( "Mon emploi du temps" );
@@ -60,24 +68,16 @@ public class ViewStudent extends JFrame {
 
 /////////////////////////////
 
-    /* Methode de construction de la barre de menu */
     private JMenuBar createMenuBar() {
 
-        // La barre de menu à proprement parler
         JMenuBar menuBar = new JMenuBar();
         menuBar.setPreferredSize(new Dimension(0,50));
 
-        // Définition du menu déroulant "Display" et de son contenu
-        JMenu mnuDisplay = new JMenu( "Dispaly");
-        //mnuDisplay.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));// Ajouter de la disantce entre les boutons
-
-        JMenuItem mnuEdT = new JMenuItem( "temp jobs" );
-        //mnuEdT.addActionListener( this::mnuNewListener );
-        mnuDisplay.add(mnuEdT);
+        JMenu mnuDisplay = new JMenu( "General");
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnufreerooms = new JMenuItem( "Free rooms" );
+        JMenuItem mnufreerooms = new JMenuItem( "Salles " );
         mnufreerooms.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[1]);
@@ -88,19 +88,32 @@ public class ViewStudent extends JFrame {
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuDiag = new JMenuItem( "diagram" );
+        JMenuItem mnuDiag = new JMenuItem( "Diagram ciculaire" );
         mnuDiag.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent event) {
-             PieChart test = new PieChart("Pie Chart");
-             test.pack();
-             RefineryUtilities.centerFrameOnScreen(test);
-             test.setVisible(true);
-         }
-        });
+            SwingUtilities.invokeLater(() -> {
+            PieChart example = new PieChart("NUMBER COURSE ",listSessions);
+            example.setSize(800, 400);
+            example.setLocationRelativeTo(null);
+            example.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            example.setVisible(true); });
+        }}
+        );
         mnuDisplay.add(mnuDiag);
+        JMenuItem mnuDiag2 = new JMenuItem( "Diagram baton" );
+        mnuDiag2.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent event) {
+        SwingUtilities.invokeLater(()->{
+        Chart2 example=new Chart2("NUMBER COURSE", listSessions);
+        example.setSize(800, 400);
+        example.setLocationRelativeTo(null);
+        example.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        example.setVisible(true); });
+        }}
+        );
+        mnuDisplay.add(mnuDiag2);
 
         mnuDisplay.addSeparator();
 
-        JMenuItem mnuExit = new JMenuItem( "Exit" );
+        JMenuItem mnuExit = new JMenuItem( "Sortie" );
         mnuExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 cardLayout.show(panelprincipal, listContent[0]);
@@ -122,14 +135,13 @@ public class ViewStudent extends JFrame {
 
     private JPanel panelEdt(){
         panelEdt = new JPanel();
-        panelEdt.setName("emploi du temps");
+        panelEdt.setName("Mon emploi du temps");
         panelEdt.setLayout(new BorderLayout());//////Probleme ici
         panelEdt.add(panelJoursSemaine(),BorderLayout.NORTH);
         panelEdt.add(panHeure(),BorderLayout.WEST);
         panelEdt.add(panQuadrillage(),BorderLayout.CENTER);
         return panelEdt;
     }
-
     private JPanel panelJoursSemaine(){
 
         panelJoursSemaine = new JPanel();
@@ -146,7 +158,7 @@ public class ViewStudent extends JFrame {
     private  JPanel panHeure(){
         JPanel jPanel = new JPanel(new GridLayout(8,1));
         jPanel.setPreferredSize(new Dimension(160,0));
-        jPanel.setBackground(new Color(80,80,200));
+        jPanel.setBackground(new Color(255,255,255));
         JLabel jlabel_7H_9H30= new JLabel("7h - 9H30", SwingConstants.CENTER);
         jPanel.add(jlabel_7H_9H30);
         JLabel jlabel_9H30_11H= new JLabel("9H30 - 11H", SwingConstants.CENTER);
@@ -191,7 +203,7 @@ public class ViewStudent extends JFrame {
     private JPanel panSemaine(){
 
         JPanel jPanel = new JPanel(new GridLayout(1,30));
-        jPanel.setBackground(new Color(80,80,200));
+        jPanel.setBackground(new Color(255,255,255));
         for(int i = 1; i<30;i++ ){
             jPanel.add( new JButton(String.valueOf(i)));
         }
@@ -201,7 +213,7 @@ public class ViewStudent extends JFrame {
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(37, 253, 233));
+        jPanel.setBackground(new Color(255,255,255));
         for (int i = 1; i < 49; i++) {
 
             jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
@@ -210,69 +222,111 @@ public class ViewStudent extends JFrame {
     }
 
     /////////////////////////////
-    private JPanel panelAfficherR(){
+
+    private JPanel panelAfficherR() {
 
         panelAfficherRoom = new JPanel();
         panelAfficherRoom.setLayout(new BorderLayout());
-        panelAfficherRoom.add(panelinfoRoom(),BorderLayout.NORTH);
+        panelAfficherRoom.add(panelinfoRoom(), BorderLayout.NORTH);
 
-        JScrollPane jScrollPaneS = new JScrollPane(panelListeRoom());
-        jScrollPaneS.setPreferredSize(new Dimension(0,70));
-        panelAfficherRoom.add(jScrollPaneS,BorderLayout.CENTER);
+        JScrollPane jScrollPaneS = new JScrollPane(panelListeRoom(listRoom));
+        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
+        panelAfficherRoom.add(jScrollPaneS, BorderLayout.CENTER);
 
         return panelAfficherRoom;
     }
-
-    private JPanel panelinfoRoom(){
+    private JPanel panelinfoRoom() {
 
         panelinfoRoom = new JPanel();
         panelinfoRoom.setLayout(new BorderLayout());
-        panelinfoRoom.add(panelinfoRrecherche(),BorderLayout.NORTH);
-        panelinfoRoom.add(panelinfoR(),BorderLayout.CENTER);
+        panelinfoRoom.add(panelinfoRrecherche(), BorderLayout.NORTH);
+        panelinfoRoom.add(panelinfoR(), BorderLayout.CENTER);
 
         return panelinfoRoom;
 
     }
-    private JPanel panelinfoRrecherche(){
+    private JPanel panelinfoRrecherche() {
         panelinfoRrecherche = new JPanel();
-        JTextField jtextRechRoom = new JTextField("Number" );
-        jtextRechRoom.setPreferredSize(new Dimension(120,30));
-        JButton jButtonRecherche = new JButton("Search");
+        JTextField jtextRechRoom = new JTextField("Numero");
+        jtextRechRoom.setPreferredSize(new Dimension(120, 30));
+        JButton jButtonRecherche = new JButton("Recherche");
+        panelinfoRrecherche.add(jtextRechRoom);
+        panelinfoRrecherche.add(jButtonRecherche);
 
-        panelinfoRrecherche.add(jtextRechRoom);//---------------------Ajouter listner
-        panelinfoRrecherche.add(jButtonRecherche);//---------------------Ajouter listner
+        jButtonRecherche.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                String Numero = jtextRechRoom.getText();
+                for (Room room : listRoom) {
+                    if (room.getName().equals(Numero)) {
+                        Rrecherche(room);}
 
+                    else JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle n° "+ Numero +" n'existe pas" );
+                }
+            }
+        });
         return panelinfoRrecherche;
     }
-    private JPanel panelinfoR(){
+    private JFrame Rrecherche(Room room){
+        String site;
+        JPanel jPanel = new JPanel(new GridLayout(3,1));
+        jPanel.add(new JLabel("Numero de salle: "+room.getName(), SwingConstants.CENTER));
+        jPanel.add(new JLabel("Capcaité salle max : "+room.getCapacity(), SwingConstants.CENTER));
+        if(room.getIdSite()==1){
+            site = "Paris";
+        }
+        else{
+            site = "Lyon";
+        }
+        jPanel.add(new JLabel("site : "+ site, SwingConstants.CENTER));
 
-        panelinfoR= new JPanel( new GridLayout(1,6));
-        panelinfoR.setPreferredSize(new Dimension(0,50));
+        JFrame frameSrecherche = new JFrame();
+        frameSrecherche.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frameSrecherche.setSize(400, 200);
+        frameSrecherche.setTitle("Recherche Professeur");
+        frameSrecherche.setLocationRelativeTo(null);
+        frameSrecherche.setResizable(false);
+        frameSrecherche.getContentPane().add(jPanel, BorderLayout.CENTER);
+        frameSrecherche.setVisible(true);
 
-        JLabel jLabelRoomStage= new JLabel("Stage", SwingConstants.CENTER);
+        return frameSrecherche;
+
+    }
+    private JPanel panelinfoR() {
+
+        panelinfoR = new JPanel(new GridLayout(1, 6));
+        panelinfoR.setPreferredSize(new Dimension(0, 50));
+
+        JLabel jLabelRoomStage = new JLabel("Numero", SwingConstants.CENTER);
         panelinfoR.add(jLabelRoomStage);
-        JLabel jLabelRnumber= new JLabel("Number", SwingConstants.CENTER);
+        JLabel jLabelRnumber = new JLabel("Capacité", SwingConstants.CENTER);
         panelinfoR.add(jLabelRnumber);
-        JLabel jLabelRetat= new JLabel("Etat", SwingConstants.CENTER);
+        JLabel jLabelRetat = new JLabel("Site", SwingConstants.CENTER);
         panelinfoR.add(jLabelRetat);
 
         return panelinfoR;
 
     }
-    private JPanel panelListeRoom(){
+    private JPanel panelListeRoom(List<Room> listRoom) {
+        String site;
+        panelListeRoom = new JPanel(new GridLayout(listRoom.size(), 1));//remplacer 15 par n etudiants
 
-        panelListeRoom = new JPanel(new GridLayout(50,1));//remplacer 15 par n etudiants
-        //-------------------------------------------- recuperer le nombre d'eleves (dans un tableau ou jsp quoi)
-        for (int i = 1; i <= 50; i++) {
-            panelListeRoom.add(new JLabel(" 4", SwingConstants.CENTER));//Ajouter fonction string avec tt les infos de l'etudiant
-            panelListeRoom.add(new JLabel(" i404", SwingConstants.CENTER));
-            panelListeRoom.add(new JLabel(" Free", SwingConstants.CENTER));
+        for (Room room : listRoom) {
+            panelListeRoom.add(new JLabel(room.getName(), SwingConstants.CENTER));//Ajouter fonction string avec tt les infos de l'etudiant
+            panelListeRoom.add(new JLabel(String.valueOf(room.getCapacity()), SwingConstants.CENTER));
 
+            if(room.getIdSite()==1){
+                site = "Paris";
+            }
+            else{
+                site = "Lyon";
+            }
+            panelListeRoom.add(new JLabel(site, SwingConstants.CENTER));
 
         }
 
         return panelListeRoom;
     }
+
 
 /////////////////////////////
 
@@ -284,5 +338,4 @@ public class ViewStudent extends JFrame {
         ViewStudent frame = new ViewStudent(db, cnx, 42);
         frame.setVisible(true);
     }
-
 }

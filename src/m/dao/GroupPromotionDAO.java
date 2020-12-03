@@ -91,4 +91,22 @@ public class GroupPromotionDAO extends DAO<GroupPromotion>{
 
         return listGroupsPromotion;
     }
+    public GroupPromotion find(String name) {
+        GroupPromotion groupPromotion = new GroupPromotion();
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM group_promotion WHERE NAME = " + "'" + name + "'");
+            if(result.first()) {
+                groupPromotion = new GroupPromotion(result.getInt("ID"),
+                        result.getString("NAME"),
+                        result.getInt("ID_PROMOTION"));
+            }
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return groupPromotion;
+    }
 }

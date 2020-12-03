@@ -13,6 +13,23 @@ public class CourseDAO extends DAO<Course> {
         super(conn);
     }
 
+    public Course find(String name) {
+        Course course = new Course();
+        try {
+            ResultSet result = this.connect.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            ).executeQuery("SELECT * FROM course WHERE NAME = " + "'" + name + "'");
+            if(result.first()) {
+                course = new Course(result.getInt("ID"), name);
+            }
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return course;
+    }
+
     public boolean create(Course obj) {
         try {
             this.connect.createStatement().executeUpdate("INSERT INTO course(NAME)" +

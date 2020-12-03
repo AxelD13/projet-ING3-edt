@@ -10,6 +10,7 @@ import m.user.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class StudentDAO extends DAO<Student>{
 
@@ -129,6 +130,23 @@ public class StudentDAO extends DAO<Student>{
         }
 
         return listStudents;
+    }
+
+    public int generateRandomNumber() {  //génère un Number aléatoire (utile pour la création d'un Student)
+        List<Integer> listNumbers = new ArrayList<>();
+        List<Student> listStudents = getAll();
+        for(Student student : listStudents) {
+            listNumbers.add(student.getNumber());
+        }
+        Random rnd = new Random();
+        int number = rnd.nextInt(1000 - listNumbers.size());
+        for(Integer integer : listNumbers) {
+            if (number < integer) {
+                break;
+            }
+            number++;
+        }
+        return number;
     }
 
 }

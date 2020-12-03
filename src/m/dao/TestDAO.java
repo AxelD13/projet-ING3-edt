@@ -17,7 +17,7 @@ import java.util.Set;
 public class TestDAO {
 
     public static void main(String[] args) {
-        Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+        Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
         Connection cnx = db.connectDB();
 
         /*

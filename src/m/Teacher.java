@@ -47,6 +47,9 @@ public class Teacher extends User {
 
     public void updateNbHours(int h) { this.nbHours += h; }
 
+    public Teacher(String email, String password, String lastName, String firstName) {
+        super(email, password, lastName, firstName, EnumPermission.TEACHER);
+    }
     @Override
     public String toString() { return getLastName() + " " + getFirstName() + " " + displayCourses(); };
     //problème ici avec hashSetCourses.toString, il faudra sûrement override la fonction toString
