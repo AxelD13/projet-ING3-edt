@@ -1,6 +1,8 @@
 package v;
 
+import m.Course;
 import m.Room;
+import m.dao.CourseDAO;
 import m.dao.DAO;
 import m.dao.RoomDAO;
 import m.dao.SessionDAO;
@@ -13,6 +15,9 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -212,17 +217,38 @@ public class ViewStudent extends JFrame {
     }
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
+        DAO<Session> sessionDAO = new SessionDAO(cnx);
+        DAO<Course> courseDAO = new CourseDAO(cnx);
+        List<Session> listSessions = sessionDAO.getAll();
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
         jPanel.setBackground(new Color(255,255,255));
-        for (int i = 1; i < 49; i++) {
-
-            jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
+        int week = 1;
+        Date date = new Date(2020,11,16);
+        Time startTime = new Time(8,0,0);
+        Time endTime = new Time(9,30,0);
+        for(int i=0; i<8; i++) {
+            for(int j=0; j<6; j++) {
+                JPanelSession jPanelSession = new JPanelSession(week, date, startTime, endTime);
+                for(Session session : listSessions) {
+                    if(session.getWeek() == week  && session.getStartTime().equals(startTime) && session.getEndTime().equals(endTime)) {
+                        //jPanelSession.setTextField(new JTextField(courseDAO.find(session.getIdCourse()).getName()));
+                    }
+                }
+                jPanel.add(jPanelSession);
+            }
+            startTime.setHours(startTime.getHours() + 1);
+            startTime.setMinutes(startTime.getMinutes() + 30);
+            endTime.setHours(startTime.getHours() + 1);
+            endTime.setMinutes(startTime.getMinutes() + 30);
         }
         return jPanel;
     }
 
     /////////////////////////////
-
+    /**
+     * Creation d'un des panel principale Affichage des salles
+     * @return
+     */
     private JPanel panelAfficherR() {
 
         panelAfficherRoom = new JPanel();
@@ -235,6 +261,10 @@ public class ViewStudent extends JFrame {
 
         return panelAfficherRoom;
     }
+    /**
+     * Regroupement de toutes les panel informations et liste
+     * @return
+     */
     private JPanel panelinfoRoom() {
 
         panelinfoRoom = new JPanel();
@@ -249,48 +279,78 @@ public class ViewStudent extends JFrame {
         panelinfoRrecherche = new JPanel();
         JTextField jtextRechRoom = new JTextField("Numero");
         jtextRechRoom.setPreferredSize(new Dimension(120, 30));
+        JTextField jtextRechRoomSite = new JTextField("Site");
+        jtextRechRoomSite.setPreferredSize(new Dimension(120, 30));
         JButton jButtonRecherche = new JButton("Recherche");
         panelinfoRrecherche.add(jtextRechRoom);
+        panelinfoRrecherche.add(jtextRechRoomSite);
         panelinfoRrecherche.add(jButtonRecherche);
 
         jButtonRecherche.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 String Numero = jtextRechRoom.getText();
-                for (Room room : listRoom) {
-                    if (room.getName().equals(Numero)) {
-                        Rrecherche(room);}
+                String site = jtextRechRoomSite.getText();
+                List<Room> roomRecherche = new ArrayList();
+                int idSite;
+                if(site.equals("Paris")){idSite = 1;}
+                else{ idSite = 2;}
 
-                    else JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle n° "+ Numero +" n'existe pas" );
+                for (Room room : listRoom) {
+                    if (Numero.equals(room.getName())) {
+                        roomRecherche.add(room);
+                    }
+                    if(room.getIdSite() == idSite){
+                        roomRecherche.add(room);
+                    }
                 }
+                if(roomRecherche == null){
+                    JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle que vous recherché n'existe pas");
+                }
+                Rrecherche(roomRecherche);
             }
         });
+
         return panelinfoRrecherche;
     }
-    private JFrame Rrecherche(Room room){
+
+    /**
+     * Panel affichant les Room rechercher
+     * @param room
+     * @return
+     */
+    private JFrame Rrecherche(List<Room> room){
         String site;
-        JPanel jPanel = new JPanel(new GridLayout(3,1));
-        jPanel.add(new JLabel("Numero de salle: "+room.getName(), SwingConstants.CENTER));
-        jPanel.add(new JLabel("Capcaité salle max : "+room.getCapacity(), SwingConstants.CENTER));
-        if(room.getIdSite()==1){
-            site = "Paris";
+
+        JPanel jPanel = new JPanel(new GridLayout(room.size(),1));
+        for (Room rooms : room) {
+            jPanel.add(new JLabel("Numero de salle: " + rooms.getName(), SwingConstants.CENTER));
+            jPanel.add(new JLabel("Capcaité salle max : " + rooms.getCapacity(), SwingConstants.CENTER));
+            if (rooms.getIdSite() == 1) {
+                site = "Paris";
+            } else {
+                site = "Lyon";
+            }
+            jPanel.add(new JLabel("site : " + site, SwingConstants.CENTER));
         }
-        else{
-            site = "Lyon";
-        }
-        jPanel.add(new JLabel("site : "+ site, SwingConstants.CENTER));
 
         JFrame frameSrecherche = new JFrame();
         frameSrecherche.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frameSrecherche.setSize(400, 200);
-        frameSrecherche.setTitle("Recherche Professeur");
+        frameSrecherche.setSize(400, 300);
+        frameSrecherche.setTitle("Recherche Salles");
         frameSrecherche.setLocationRelativeTo(null);
-        frameSrecherche.setResizable(false);
-        frameSrecherche.getContentPane().add(jPanel, BorderLayout.CENTER);
+        frameSrecherche.setResizable(true);
+        JScrollPane jScrollPaneS = new JScrollPane(jPanel);
+        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
+        frameSrecherche.add(jScrollPaneS, BorderLayout.CENTER);
         frameSrecherche.setVisible(true);
 
         return frameSrecherche;
 
     }
+    /**
+     * Panel concernant les caracteristiques de chaque salles
+     * @return
+     */
     private JPanel panelinfoR() {
 
         panelinfoR = new JPanel(new GridLayout(1, 6));
@@ -306,6 +366,11 @@ public class ViewStudent extends JFrame {
         return panelinfoR;
 
     }
+    /**
+     * Panel montrant l'affichage de la list des salles
+     * @param listRoom
+     * @return
+     */
     private JPanel panelListeRoom(List<Room> listRoom) {
         String site;
         panelListeRoom = new JPanel(new GridLayout(listRoom.size(), 1));//remplacer 15 par n etudiants

@@ -1,16 +1,19 @@
 package v;
 import c.Database;
+import m.Course;
 import m.Room;
 import m.Student;
-import m.dao.DAO;
-import m.dao.RoomDAO;
-import m.dao.StudentDAO;
+import m.dao.*;
+import m.session.Session;
+
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,11 +209,29 @@ public class ViewTeacher extends JFrame {
     }
     /* Methode de construction des plages horaires*/
     private JPanel panQuadrillage() {
+        DAO<Session> sessionDAO = new SessionDAO(cnx);
+        DAO<Course> courseDAO = new CourseDAO(cnx);
+        List<Session> listSessions = sessionDAO.getAll();
         JPanel jPanel = new JPanel(new GridLayout(8, 6));
-        jPanel.setBackground(new Color(255, 255, 255));
-        for (int i = 1; i < 49; i++) {
-
-            jPanel.add(new JTextField("Matiere : Maths / Salle : i404 / Prof : Dedecker"));
+        jPanel.setBackground(new Color(255,255,255));
+        int week = 1;
+        Date date = new Date(2020,11,16);
+        Time startTime = new Time(8,0,0);
+        Time endTime = new Time(9,30,0);
+        for(int i=0; i<8; i++) {
+            for(int j=0; j<6; j++) {
+                JPanelSession jPanelSession = new JPanelSession(week, date, startTime, endTime);
+                for(Session session : listSessions) {
+                    if(session.getWeek() == week  && session.getStartTime().equals(startTime) && session.getEndTime().equals(endTime)) {
+                        //jPanelSession.setTextField(new JTextField(courseDAO.find(session.getIdCourse()).getName()));
+                    }
+                }
+                jPanel.add(jPanelSession);
+            }
+            startTime.setHours(startTime.getHours() + 1);
+            startTime.setMinutes(startTime.getMinutes() + 30);
+            endTime.setHours(startTime.getHours() + 1);
+            endTime.setMinutes(startTime.getMinutes() + 30);
         }
         return jPanel;
     }
@@ -218,12 +239,17 @@ public class ViewTeacher extends JFrame {
 /////////////////////////////
 
     private JPanel panelAfficherS(){
-    cardLayoutStudent = new CardLayout();
-    panelAfficherStudent = new JPanel();
-    panelAfficherStudent.setLayout(cardLayoutStudent);
-    panelAfficherStudent.add(panelAfficherS2(), listStudent[0]);
-    return panelAfficherStudent;
-}
+        cardLayoutStudent = new CardLayout();
+        panelAfficherStudent = new JPanel();
+        panelAfficherStudent.setLayout(cardLayoutStudent);
+        panelAfficherStudent.add(panelAfficherS2(), listStudent[0]);
+        return panelAfficherStudent;
+    }
+
+    /**
+     * Ajout du panel panelInfoStudent et panelListeStudent
+     * @return
+     */
     private JPanel panelAfficherS2() {
 
         JPanel jpanel = new JPanel();
@@ -236,6 +262,11 @@ public class ViewTeacher extends JFrame {
 
         return jpanel;
     }
+
+    /**
+     * Ajout dans un panel tout les panel concernant les informations de l'etudiant
+     * @return
+     */
     private JPanel panelInfoStudent() {
 
         panelInfoStudent = new JPanel();
@@ -314,9 +345,9 @@ public class ViewTeacher extends JFrame {
         panelInfoS = new JPanel(new GridLayout(1, 6));
         panelInfoS.setPreferredSize(new Dimension(0, 50));
 
-        JLabel jLabel_Lundi = new JLabel("Nom", SwingConstants.CENTER);
+        JLabel jLabel_Lundi = new JLabel("Prenom", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Lundi);
-        JLabel jLabel_Mardi = new JLabel("Prenom", SwingConstants.CENTER);
+        JLabel jLabel_Mardi = new JLabel("Nom", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Mardi);
         JLabel jLabel_Mercredi = new JLabel("Groupe Promotion", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Mercredi);
@@ -326,6 +357,11 @@ public class ViewTeacher extends JFrame {
         return panelInfoS;
 
     }
+
+    /**
+     * Affichage de tt les données de l'etudiant listStudents
+     * @return
+     */
     private JPanel panelListeStudent(List<Student> listStudents) {
 
         panelListeStudent = new JPanel(new GridLayout(listStudents.size(), 1));
@@ -340,7 +376,10 @@ public class ViewTeacher extends JFrame {
     }
 
 /////////////////////////////
-
+    /**
+     * Creation d'un des panel principale Affichage des salles
+     * @return
+     */
     private JPanel panelAfficherR() {
 
         panelAfficherRoom = new JPanel();
@@ -353,6 +392,10 @@ public class ViewTeacher extends JFrame {
 
         return panelAfficherRoom;
     }
+    /**
+     * Regroupement de toutes les panel informations et liste
+     * @return
+     */
     private JPanel panelinfoRoom() {
 
         panelinfoRoom = new JPanel();
@@ -367,48 +410,77 @@ public class ViewTeacher extends JFrame {
         panelinfoRrecherche = new JPanel();
         JTextField jtextRechRoom = new JTextField("Numero");
         jtextRechRoom.setPreferredSize(new Dimension(120, 30));
+        JTextField jtextRechRoomSite = new JTextField("Site");
+        jtextRechRoomSite.setPreferredSize(new Dimension(120, 30));
         JButton jButtonRecherche = new JButton("Recherche");
         panelinfoRrecherche.add(jtextRechRoom);
+        panelinfoRrecherche.add(jtextRechRoomSite);
         panelinfoRrecherche.add(jButtonRecherche);
 
         jButtonRecherche.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 String Numero = jtextRechRoom.getText();
-                for (Room room : listRoom) {
-                    if (room.getName().equals(Numero)) {
-                        Rrecherche(room);}
+                String site = jtextRechRoomSite.getText();
+                List<Room> roomRecherche = new ArrayList();
+                int idSite;
+                if(site.equals("Paris")){idSite = 1;}
+                else{ idSite = 2;}
 
-                    else JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle n° "+ Numero +" n'existe pas" );
+                for (Room room : listRoom) {
+                    if (Numero.equals(room.getName())) {
+                        roomRecherche.add(room);
+                    }
+                    if(room.getIdSite() == idSite){
+                        roomRecherche.add(room);
+                    }
                 }
+                if(roomRecherche == null){
+                    JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle que vous recherché n'existe pas");
+                }
+                Rrecherche(roomRecherche);
             }
         });
+
         return panelinfoRrecherche;
     }
-    private JFrame Rrecherche(Room room){
+    /**
+     * Panel affichant les Room rechercher
+     * @param room
+     * @return
+     */
+    private JFrame Rrecherche(List<Room> room){
         String site;
-        JPanel jPanel = new JPanel(new GridLayout(3,1));
-        jPanel.add(new JLabel("Numero de salle: "+room.getName(), SwingConstants.CENTER));
-        jPanel.add(new JLabel("Capcaité salle max : "+room.getCapacity(), SwingConstants.CENTER));
-        if(room.getIdSite()==1){
-            site = "Paris";
+
+        JPanel jPanel = new JPanel(new GridLayout(room.size(),1));
+        for (Room rooms : room) {
+            jPanel.add(new JLabel("Numero de salle: " + rooms.getName(), SwingConstants.CENTER));
+            jPanel.add(new JLabel("Capcaité salle max : " + rooms.getCapacity(), SwingConstants.CENTER));
+            if (rooms.getIdSite() == 1) {
+                site = "Paris";
+            } else {
+                site = "Lyon";
+            }
+            jPanel.add(new JLabel("site : " + site, SwingConstants.CENTER));
         }
-        else{
-            site = "Lyon";
-        }
-        jPanel.add(new JLabel("site : "+ site, SwingConstants.CENTER));
 
         JFrame frameSrecherche = new JFrame();
         frameSrecherche.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frameSrecherche.setSize(400, 200);
-        frameSrecherche.setTitle("Recherche Professeur");
+        frameSrecherche.setSize(400, 300);
+        frameSrecherche.setTitle("Recherche Salles");
         frameSrecherche.setLocationRelativeTo(null);
-        frameSrecherche.setResizable(false);
-        frameSrecherche.getContentPane().add(jPanel, BorderLayout.CENTER);
+        frameSrecherche.setResizable(true);
+        JScrollPane jScrollPaneS = new JScrollPane(jPanel);
+        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
+        frameSrecherche.add(jScrollPaneS, BorderLayout.CENTER);
         frameSrecherche.setVisible(true);
 
         return frameSrecherche;
 
     }
+    /**
+     * Panel concernant les caracteristiques de chaque salles
+     * @return
+     */
     private JPanel panelinfoR() {
 
         panelinfoR = new JPanel(new GridLayout(1, 6));
@@ -424,6 +496,11 @@ public class ViewTeacher extends JFrame {
         return panelinfoR;
 
     }
+    /**
+     * Panel montrant l'affichage de la list des salles
+     * @param listRoom
+     * @return
+     */
     private JPanel panelListeRoom(List<Room> listRoom) {
         String site;
         panelListeRoom = new JPanel(new GridLayout(listRoom.size(), 1));//remplacer 15 par n etudiants
@@ -446,8 +523,10 @@ public class ViewTeacher extends JFrame {
     }
 
 /////////////////////////////
-
-
+    /**
+     * Creation d'un des panel principale Affichage des promos
+     * @return
+     */
     private JPanel panelAfficherP() {
 
         List<Student> listePromo1 = new ArrayList();
@@ -487,6 +566,12 @@ public class ViewTeacher extends JFrame {
 
         return panelAfficherPromo;
     }
+
+    /**
+     * Associations de chaque panel info et liste des promos
+     * @param students
+     * @return
+     */
     private JPanel panelpromo2(List<Student> students) {
 
         JPanel jpanel = new JPanel();
@@ -498,6 +583,12 @@ public class ViewTeacher extends JFrame {
 
         return jpanel;
     }
+
+    /**
+     * panel des liste des eleves par eleves
+     * @param students
+     * @return
+     */
     private JPanel panelListeEleveP(List<Student> students) {
 
         panelListeEleveP = new JPanel();
@@ -506,6 +597,11 @@ public class ViewTeacher extends JFrame {
 
         return panelListeEleveP;
     }
+
+    /**
+     * panel affichant les differents promotion afin de choisir la liste d'eleve a choisir
+     * @return
+     */
     private JPanel panelListePromo() {
 
 

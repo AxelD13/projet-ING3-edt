@@ -5,7 +5,7 @@ import m.*;
 import m.dao.*;
 import m.session.Session;
 import m.user.User;
-
+import java.sql.Date;
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
@@ -157,10 +157,6 @@ public class ViewDirector extends JFrame {
         mnuEdit.add(mnuAddCours);
 
         mnuEdit.addSeparator();
-
-        JMenuItem mnuAddMatiere = new JMenuItem("Matiere");
-        mnuEdit.add(mnuAddMatiere);
-
         menuBar.add(mnuEdit);
 
         /** Définition du menu déroulant "Supprimer" et de son contenu**/
@@ -182,11 +178,6 @@ public class ViewDirector extends JFrame {
             }
         });
         mnuDelete.add(mnuDeleteStudent);
-
-        mnuDelete.addSeparator();
-
-        JMenuItem mnuDeleteClasses = new JMenuItem("Classes");
-        mnuDelete.add(mnuDeleteClasses);
 
         menuBar.add(mnuDelete);
 
@@ -284,6 +275,7 @@ public class ViewDirector extends JFrame {
 
         return jPanel;
     }
+
     private JPanel panQuadrillage() {
         DAO<Session> sessionDAO = new SessionDAO(cnx);
         DAO<Course> courseDAO = new CourseDAO(cnx);
@@ -296,10 +288,10 @@ public class ViewDirector extends JFrame {
         Time endTime = new Time(9,30,0);
         for(int i=0; i<8; i++) {
             for(int j=0; j<6; j++) {
-                JPanelSession jPanelSession = new JPanelSession(week, (java.sql.Date) date, startTime, endTime);
+                JPanelSession jPanelSession = new JPanelSession(week, date, startTime, endTime);
                 for(Session session : listSessions) {
                     if(session.getWeek() == week  && session.getStartTime().equals(startTime) && session.getEndTime().equals(endTime)) {
-                        jPanelSession.setTextField(new JTextField(courseDAO.find(session.getIdCourse()).getName()));
+                        //jPanelSession.setTextField(new JTextField(courseDAO.find(session.getIdCourse()).getName()));
                     }
                 }
                 jPanel.add(jPanelSession);
@@ -317,6 +309,8 @@ public class ViewDirector extends JFrame {
      * Creation d'un des panel principale Affichage studiant
      * @return
      */
+/////////////////////////////
+
     private JPanel panelAfficherS(){
         cardLayoutStudent = new CardLayout();
         panelAfficherStudent = new JPanel();
@@ -424,9 +418,9 @@ public class ViewDirector extends JFrame {
         panelInfoS = new JPanel(new GridLayout(1, 6));
         panelInfoS.setPreferredSize(new Dimension(0, 50));
 
-        JLabel jLabel_Lundi = new JLabel("Nom", SwingConstants.CENTER);
+        JLabel jLabel_Lundi = new JLabel("Prenom", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Lundi);
-        JLabel jLabel_Mardi = new JLabel("Prenom", SwingConstants.CENTER);
+        JLabel jLabel_Mardi = new JLabel("Nom", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Mardi);
         JLabel jLabel_Mercredi = new JLabel("Groupe Promotion", SwingConstants.CENTER);
         panelInfoS.add(jLabel_Mercredi);
@@ -501,9 +495,9 @@ public class ViewDirector extends JFrame {
     }
     private JPanel panelinfoTrecherche() {
         panelinfoTrecherche = new JPanel();
-        JTextField jtextRechNom = new JTextField("Nom");
+        JTextField jtextRechNom = new JTextField("Prenom");
         jtextRechNom.setPreferredSize(new Dimension(120, 30));
-        JTextField jtextPrenom = new JTextField("Prenom");
+        JTextField jtextPrenom = new JTextField("Nom");
         jtextPrenom.setPreferredSize(new Dimension(120, 30));
         JButton jButtonRecherche = new JButton("Recherhce");
         JButton jButtonReturn = new JButton("Retour");
@@ -567,9 +561,9 @@ public class ViewDirector extends JFrame {
 
         panelinfoT = new JPanel(new GridLayout(1, 6));
         panelinfoT.setPreferredSize(new Dimension(0, 50));
-        JLabel jLabelTfirstName = new JLabel("Nom", SwingConstants.CENTER);
+        JLabel jLabelTfirstName = new JLabel("Prenom", SwingConstants.CENTER);
         panelinfoT.add(jLabelTfirstName);
-        JLabel jLabelTname = new JLabel("Prenom", SwingConstants.CENTER);
+        JLabel jLabelTname = new JLabel("Nom", SwingConstants.CENTER);
         panelinfoT.add(jLabelTname);
         JLabel jLabelTmatiere = new JLabel("Email", SwingConstants.CENTER);
         panelinfoT.add(jLabelTmatiere);
@@ -631,43 +625,68 @@ public class ViewDirector extends JFrame {
         panelinfoRrecherche = new JPanel();
         JTextField jtextRechRoom = new JTextField("Numero");
         jtextRechRoom.setPreferredSize(new Dimension(120, 30));
+        JTextField jtextRechRoomSite = new JTextField("Site");
+        jtextRechRoomSite.setPreferredSize(new Dimension(120, 30));
         JButton jButtonRecherche = new JButton("Recherche");
         panelinfoRrecherche.add(jtextRechRoom);
+        panelinfoRrecherche.add(jtextRechRoomSite);
         panelinfoRrecherche.add(jButtonRecherche);
 
         jButtonRecherche.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 String Numero = jtextRechRoom.getText();
-                for (Room room : listRoom) {
-                    if (room.getName().equals(Numero)) {
-                        Rrecherche(room);}
+                String site = jtextRechRoomSite.getText();
+                List<Room> roomRecherche = new ArrayList();
+                int idSite;
+                if(site.equals("Paris")){idSite = 1;}
+                else{ idSite = 2;}
 
-                        else JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle n° "+ Numero +" n'existe pas" );
+                for (Room room : listRoom) {
+                    if (Numero.equals(room.getName())) {
+                        roomRecherche.add(room);
+                    }
+                    if(room.getIdSite() == idSite){
+                        roomRecherche.add(room);
+                    }
                 }
+                if(roomRecherche == null){
+                    JOptionPane.showMessageDialog(panelinfoSrecherche, "La salle que vous recherché n'existe pas");
+                }
+                Rrecherche(roomRecherche);
             }
         });
+
         return panelinfoRrecherche;
     }
-    private JFrame Rrecherche(Room room){
+    /**
+     * Panel affichant les Room rechercher
+     * @param room
+     * @return
+     */
+    private JFrame Rrecherche(List<Room> room){
         String site;
-        JPanel jPanel = new JPanel(new GridLayout(3,1));
-        jPanel.add(new JLabel("Numero de salle: "+room.getName(), SwingConstants.CENTER));
-        jPanel.add(new JLabel("Capcaité salle max : "+room.getCapacity(), SwingConstants.CENTER));
-        if(room.getIdSite()==1){
-            site = "Paris";
+
+        JPanel jPanel = new JPanel(new GridLayout(room.size(),1));
+        for (Room rooms : room) {
+            jPanel.add(new JLabel("Numero de salle: " + rooms.getName(), SwingConstants.CENTER));
+            jPanel.add(new JLabel("Capcaité salle max : " + rooms.getCapacity(), SwingConstants.CENTER));
+            if (rooms.getIdSite() == 1) {
+                site = "Paris";
+            } else {
+                site = "Lyon";
+            }
+            jPanel.add(new JLabel("site : " + site, SwingConstants.CENTER));
         }
-        else{
-            site = "Lyon";
-        }
-        jPanel.add(new JLabel("site : "+ site, SwingConstants.CENTER));
 
         JFrame frameSrecherche = new JFrame();
         frameSrecherche.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frameSrecherche.setSize(400, 200);
-        frameSrecherche.setTitle("Recherche Professeur");
+        frameSrecherche.setSize(400, 300);
+        frameSrecherche.setTitle("Recherche Salles");
         frameSrecherche.setLocationRelativeTo(null);
-        frameSrecherche.setResizable(false);
-        frameSrecherche.getContentPane().add(jPanel, BorderLayout.CENTER);
+        frameSrecherche.setResizable(true);
+        JScrollPane jScrollPaneS = new JScrollPane(jPanel);
+        jScrollPaneS.setPreferredSize(new Dimension(0, 70));
+        frameSrecherche.add(jScrollPaneS, BorderLayout.CENTER);
         frameSrecherche.setVisible(true);
 
         return frameSrecherche;
@@ -1216,7 +1235,6 @@ public class ViewDirector extends JFrame {
         frameDeleteTeachers.setSize(800, 600);
         frameDeleteTeachers.setTitle("Supprimer Professeur");
         frameDeleteTeachers.setLocationRelativeTo(null);
-       // frameDeleteTeachers.setResizable(false);
         frameDeleteTeachers.setVisible(true);
         JScrollPane jScrollPaneS = new JScrollPane(DeleteTeachers(listTeachers));
         jScrollPaneS.setPreferredSize(new Dimension(0, 70));
@@ -1308,7 +1326,7 @@ public class ViewDirector extends JFrame {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Database db = new Database("jdbc:mysql://localhost:3306/projet_edt", "root", "");
+        Database db = new Database("jdbc:mysql://localhost:8889/projet_edt", "root", "root");
         Connection cnx = db.connectDB();
         UIManager.setLookAndFeel(new NimbusLookAndFeel());
         ViewDirector frame = new ViewDirector(db,cnx,32);
